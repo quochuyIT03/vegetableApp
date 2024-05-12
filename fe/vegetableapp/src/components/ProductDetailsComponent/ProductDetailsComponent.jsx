@@ -1,8 +1,9 @@
-import { Col, Image, InputNumber, Row } from 'antd'
+import { Col, Image, Row } from 'antd'
 import React from 'react'
 import image_prod from '../../assets/images/bok_choy.jpg'
 import image_prod_small from '../../assets/images/small_img.png'
-import { WrapperAddressProduct, WrapperBtnQualityProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct, WrapperQualityProduct, WrapperStyleColImage, WrapperStyleNameProduct, WrapperStyleSmallImage, WrapperStyleTextSell } from './style'
+import { WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct, 
+    WrapperQualityProduct, WrapperStyleColImage, WrapperStyleNameProduct, WrapperStyleSmallImage, WrapperStyleTextSell } from './style'
 import {
     StarFilled, PlusOutlined, MinusOutlined
    
@@ -79,7 +80,6 @@ const ProductDetailsComponent = () => {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px'}}>
                         <ButtonComponent 
-                            bordered ={false}
                             size = {40} 
                             styleButton={{
                                 background: 'rgb(255, 57, 69)',

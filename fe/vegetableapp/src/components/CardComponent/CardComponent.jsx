@@ -8,33 +8,51 @@ import {
 import logo from '../../assets/images/abcs.png'
 import img1 from '../../assets/images/bok_choy.jpg'
 
-const CardComponent = () => {
+const CardComponent = (props) => {
+  const {name, price, image, description, countInStock, rating, type, sale, discount} = props
+
   return (
     <WrapperCardStyle
+    // hoverable
+    // headStyle={{width: '200px', 
+    //     height: '200px'
+    // }}
+    // style={{
+    //   width: 210,
+      
+    // }}
+    // bodyStyle={{padding: '10px'}}
+    // cover={<img alt="example" src={img1} />}
+
     hoverable
-    headStyle={{width: '200px', 
-        height: '200px'
+    styles={{
+      header: {
+        width: '200px',
+        height: '200px',
+      },
+      body: {
+        padding: '10px',
+      },
     }}
     style={{
       width: 210,
-      
     }}
-    bodyStyle={{padding: '10px'}}
     cover={<img alt="example" src={img1} />}
+    
   >
     <Image preview ={false} src= {logo} style={{width: '68px', height: '14px'}}/>
-    <StyleNameProduct>Rau muống</StyleNameProduct>
+    <StyleNameProduct>{name}</StyleNameProduct>
     <WrapperReporText> 
     <span style={{marginRight: '4px'}}>
-        <span>4.96</span> <StarFilled style={{ fontSize: '12px', color: 'yellow'}}/>     
+        <span>{rating}</span> <StarFilled style={{ fontSize: '12px', color: 'yellow'}}/>     
     </span>
-    <WrapperStyleTextSell> | Đã bán 1000+ </WrapperStyleTextSell>
+    <WrapperStyleTextSell> | Đã bán {sale || 500}+ </WrapperStyleTextSell>
    
     </WrapperReporText>
     <WrapperPriceText> 
-      <span style={{marginRight: '8px'}}>20.000VND </span>
+      <span style={{marginRight: '8px'}}>{price} VND</span>
       <WrapperPriceDiscountText>
-        -10%
+        {discount || 10 }%
     </WrapperPriceDiscountText>
 
     </WrapperPriceText>

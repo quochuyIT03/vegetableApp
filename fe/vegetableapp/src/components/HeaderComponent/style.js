@@ -34,3 +34,9 @@ export const WrapperIconHeader = styled.span`
     color: #fff;
     white-space: nowrap;
 `
+export const WrapperContentPopup = styled.p`
+    cursor: pointer; 
+    &:hover {
+        color: blue;
+    }
+`
