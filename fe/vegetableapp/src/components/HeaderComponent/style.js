@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const WrapperHeader = styled(Row)`
     padding: 10px 120px; 
-    background-color: rgb(26, 148, 255);
+    background-color: #195f07;
     align-items: center;
     gap: 16px; 
     flex-wrap: nowrap;
@@ -22,7 +22,7 @@ export const WrapperHeaderAccount = styled.div`
     align-items: center;
     color: #fff;
     gap: 10px;
-    font-size: 12px;
+    font-size: 14px;
 `
 
 export const WrapperTextHeaderSmall = styled.span`
@@ -37,6 +37,7 @@ export const WrapperIconHeader = styled.span`
 export const WrapperContentPopup = styled.p`
     cursor: pointer; 
     &:hover {
-        color: blue;
+        color: #195f07;
+        font-weight: 500;
     }
 `

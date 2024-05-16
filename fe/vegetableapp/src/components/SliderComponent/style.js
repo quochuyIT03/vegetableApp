@@ -2,22 +2,22 @@ import Slider from "react-slick";
 import styled from "styled-components";
 
 export const WrapperSliderStyle = styled(Slider)`
-    & .slick-arrows.slick-prev {
+    & .slick-prev {
         left: 12px; 
         top: 50%;
         z-index: 10;
         &::before {
-            font-size: 40px; 
-            color: #fff; 
+            font-size: 50px; 
+            color: #195f07;
         }
     }
-    & .slick-arrows.slick-next {
-        right: 28px;
+    & .slick-next {
+        right: 40px;
         top: 50%;
         z-index: 10; 
         &::before {
-            font-size: 40px;
-            color: #fff;
+            font-size: 50px;
+            color: #195f07;
         }
     }
     & .slick-dots {
@@ -27,6 +27,7 @@ export const WrapperSliderStyle = styled(Slider)`
             button {
                 &::before {
                     color: rgb(255, 255, 0.5);
+                    font-size: 20px;
                 }
             }
         }

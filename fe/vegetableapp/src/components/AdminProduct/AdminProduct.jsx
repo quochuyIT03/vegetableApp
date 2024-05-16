@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { WrapperHeader, WrapperUploadFile } from './style'
-import { Button, Form, Input, Modal, Space } from 'antd'
+import { Button, Form, Input, Modal, Select, Space } from 'antd'
 import TableComponent from '../TableComponent/TableComponent'
 import {
     PlusCircleFilled, UploadOutlined, DeleteOutlined, EditOutlined, SearchOutlined
    
   } from '@ant-design/icons';
 import InputComponent from '../InputComponent/InputComponent';
-import { getBase64 } from '../../utils';
+import { getBase64, renderOptions } from '../../utils';
 import { useMutationHooks } from '../../hooks/useMutationHook'
 import * as ProductService from '../../services/ProductService'
 import Loading from '../LoadingCoponent/LoadingCoponent'
@@ -21,6 +21,8 @@ import ModalComponent from '../ModalComponent/ModalComponent';
 const AdminProduct = () => {
     ////////////isModelOpen///////////////////////
     const [isModalOpen, setIsModalOpen] = useState(false);
+    ///////////////////////////////////////////////////////
+    const [typeSelect, setTypeSelect] = useState('')
     ////////////////////////////////////////////////////
     const [rowSelected, setRowSelected] = useState('')
     ////////////////////////////////////////////////////
@@ -64,8 +66,8 @@ const AdminProduct = () => {
             price: '',
             rating: '',
             countInStock: '',
-            image: ''
-            // discount: '',
+            image: '',
+            discount: '',
             // sale: '',
             })
             form.resetFields()
@@ -80,16 +82,26 @@ const AdminProduct = () => {
             price: '',
             rating: '',
             countInStock: '',
-            image: ''
-            // discount: '',
+            image: '',
+            discount: '',
             // sale: '',
             })
             form.resetFields()
       };
     ////////////////////onFinish//////////////////
     const onFinish = () => {
-        mutation.mutate(stateProduct)
-        console.log('finish', stateProduct, {
+      const params = {
+        name: stateProduct.name,
+        description: stateProduct.description,
+        type: stateProduct.type === 'add_type' ? stateProduct.newType: stateProduct.type,
+        price: stateProduct.price,
+        rating: stateProduct.rating,
+        countInStock: stateProduct.countInStock,
+        discount: stateProduct.discount,
+        // sale: '',
+        image: stateProduct.image,
+      }
+        mutation.mutate(params, {
             onSettled: () => {
                 queryProduct.refetch()
             }
@@ -103,9 +115,10 @@ const AdminProduct = () => {
         price: '',
         rating: '',
         countInStock: '',
-        // discount: '',
+        discount: '',
         // sale: '',
-        image: ''
+        image: '',
+        newType: ''
     })
     /////////////////////////////////////////////////////
     const [stateProductDetails, setStateProductDetails] = useState({
@@ -115,7 +128,7 @@ const AdminProduct = () => {
         price: '',
         rating: '',
         countInStock: '',
-        // discount: '',
+        discount: '',
         // sale: '',
         image: ''
     })
@@ -221,7 +234,7 @@ const AdminProduct = () => {
             rating,
             image, 
             countInStock,
-            // discount, 
+            discount, 
             // sale
         } = data
             const res = ProductService.createProduct({
@@ -232,7 +245,7 @@ const AdminProduct = () => {
             rating,
             countInStock,
             image,
-            // discount, 
+            discount, 
             // sale
             })
             return res
@@ -256,6 +269,7 @@ const AdminProduct = () => {
                     rating: res.data.rating,
                     countInStock: res.data.countInStock,
                     image: res.data.image,
+                    discount: res.data.discount
                 });
             }
         } catch (error) {
@@ -296,6 +310,11 @@ const AdminProduct = () => {
             }
         })
     }
+     /////////////////////////////////////////////////////////////////////////
+     const fetchAllTypeProduct = async () => {
+      const res = await ProductService.getAllTypeProduct()
+      return res
+    }
     //////////////////////////////////////////////////////
 
     const { data, isLoading, isSuccess, isError } = mutation
@@ -307,9 +326,10 @@ const AdminProduct = () => {
     ///////////////////////////////////////////////////////////
     // const {isLoading: isLoadingProducts, data: products} = useQuery({queryKey: ['products'], queryFn:getAllProducts})
     const queryProduct = useQuery({queryKey: ['products'], queryFn:getAllProducts})
+    const typeProduct = useQuery({queryKey: ['type-product'], queryFn:fetchAllTypeProduct})
     const {isLoading: isLoadingProducts, data: products} = queryProduct
     ////////////////////////////////////////////////////////
-    const renderAction = () => {
+    const renderAction = () => {  
         return (
             <div>
                 <DeleteOutlined style={{ color: 'rgb(168 15 15 / 83%)', fontSize: '30px', cursor: 'pointer' }} onClick={ () => setIsModalOpenDelete(true)}/>
@@ -317,6 +337,7 @@ const AdminProduct = () => {
             </div>
         )
     }
+   
     //////////////////////////////HandleSearch///////////////////////////////////////////
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -469,6 +490,27 @@ const AdminProduct = () => {
           title: 'Description',
           dataIndex: 'description',
           key: 'description',
+
+        },
+        {
+          title: 'Discount (%)',
+          dataIndex: 'discount',
+          key: 'discount',
+          sorter: (a, b) => a.discount - b.discount,
+        },
+        {
+          title: 'Image',
+          dataIndex: 'image',
+          key: 'image',
+          render: (text, record) => (
+            <img src={record.image} alt="Avatar" style={{
+                height: '60px', 
+                width: '60px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                marginLeft: '10px'
+            }}/>
+        )
         },
         {
           title: 'Rating',
@@ -541,9 +583,18 @@ const AdminProduct = () => {
             message.error()
         }
     }, [isSuccessUpdated])
+
+    const handleChangeSelect = (value) => {
+          setStateProduct({
+            ...stateProduct,
+            type: value
+          })   
+    }
+    
+  console.log('vluedsa', stateProduct)
   return (
     <div>
-      <WrapperHeader> Quản lí người dùng </WrapperHeader>
+      <WrapperHeader> Quản lí sản phẩm </WrapperHeader>
       <div style={{ marginTop: '10px' }} >
         <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} onClick={() => setIsModalOpen(true) } >
          <PlusCircleFilled style={{ fontSize: '60px' }} /> </Button>
@@ -582,8 +633,30 @@ const AdminProduct = () => {
                 name="type"
                 rules={[{ required: true, message: 'Please input your Product Type!' }]}
                 >
-                <InputComponent value={stateProduct.type} onChange={handleOnChange} name="type" />
-                </Form.Item>
+                
+                <Select
+                  name="type"
+                  // defaultValue="lucy"
+                  // style={{ width: 120 }}
+                  value={stateProduct.type}
+                  onChange={handleChangeSelect}
+                  options={renderOptions(typeProduct?.data?.data)}
+                />
+                
+                </Form.Item>  
+                {stateProduct.type === 'add_type' && (
+                  <Form.Item
+                  label='New type'
+                  name="newType"
+                  rules={[{ required: true, message: 'Please input your Product Type!' }]}
+                  >  
+                    <InputComponent value={stateProduct.newType} onChange={handleOnChange} name="newType" />
+
+  
+                  </Form.Item>
+                )}
+
+                
 
                 <Form.Item
                 label="Product Price"
@@ -609,7 +682,7 @@ const AdminProduct = () => {
                 <InputComponent value={stateProduct.description} onChange={handleOnChange} name="description" />
                 </Form.Item>
 
-                {/* <Form.Item
+                <Form.Item
                 label="Product Discount"
                 name="discount"
                 rules={[{ required: true, message: 'Please input your Product Discount!' }]}
@@ -617,7 +690,7 @@ const AdminProduct = () => {
                 <InputComponent value={stateProduct.discount} onChange={handleOnChange} name="discount" />
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                 label="Product Sale"
                 name="sale"
                 rules={[{ required: true, message: 'Please input your Product Sale!' }]}
@@ -711,7 +784,7 @@ const AdminProduct = () => {
                 <InputComponent value={stateProductDetails.description} onChange={handleOnChangeDetails} name="description" />
                 </Form.Item>
 
-                {/* <Form.Item
+                <Form.Item
                 label="Product Discount"
                 name="discount"
                 rules={[{ required: true, message: 'Please input your Product Discount!' }]}
@@ -719,7 +792,7 @@ const AdminProduct = () => {
                 <InputComponent value={stateProductDetails.discount} onChange={handleOnChangeDetails} name="discount" />
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                 label="Product Sale"
                 name="sale"
                 rules={[{ required: true, message: 'Please input your Product Sale!' }]}

@@ -4,7 +4,7 @@ const ProductService = require('../services/ProductService')
 
 const createProduct = async (req, res) => {
     try{
-        const {name, image, type, countInStock, price, rating, description} = req.body
+        const {name, image, type, countInStock, price, rating, description, discount} = req.body
         if(!name || !image || !type || !countInStock || !price || !rating ){
             return res.status(200).json({
                 status: 'ERR',
@@ -98,7 +98,7 @@ const getAllProduct = async (req, res) => {
     try{
         
         const { limit, page, sort, filter} = req.query
-        const response = await ProductService.getAllProduct(Number(limit) || 8, Number(page) || 0, sort, filter)
+        const response = await ProductService.getAllProduct(Number(limit) || 100, Number(page) || 0, sort, filter)
         return res.status(200).json(response)
     } catch(e) {
         return res.status(404).json({
@@ -107,57 +107,16 @@ const getAllProduct = async (req, res) => {
     }
 }
 
-// const loginUser = async (req, res) => {
-//     try{
-//         const {name, email, password, confirmPassword, phone} = req.body
-//         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
-//         const isCheckEmail = reg.test(email)
-//         if(!name || !email || !password || !confirmPassword || !phone){
-//             return res.status(200).json({
-//                 status: 'ERR',
-//                 message: 'The input is required'
-//             })
-//         }else if(!isCheckEmail){
-//             return res.status(200).json({
-//                 status: 'ERR',
-//                 message: 'The input is email'
-//             })
-//         }else if (password !== confirmPassword) {
-//             return res.status(200).json({
-//                 status: 'ERR',
-//                 message: 'The input is equal confirmPassword'
-//             })
-//         }
-//         const response = await UserService.loginUser(req.body)
-//         // await UserService.createUser()
-//         return res.status(200).json(response)
-//     } catch(e) {
-//         return res.status(404).json({
-//             message: e
-//         })
-//     }
-// }
-
-// const updateUser = async (req, res) => {
-//     try{
-//         const userId = req.params.id
-//         const data = req.body
-//         if(!userId){
-//             return res.status(200).json({
-//                 status: 'ERR',
-//                 message: 'The userId is required'
-//             })
-//         }
-//         console.log('userId', userId)
-//         const response = await UserService.updateUser(userId, data)
-//         return res.status(200).json(response)
-//     } catch(e) {
-//         return res.status(404).json({
-//             message: e
-//         })
-//     }
-// }
-
+const getAllType = async (req, res) => {
+    try{
+        const response = await ProductService.getAllType()
+        return res.status(200).json(response)
+    } catch(e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
 
 
 
@@ -183,5 +142,5 @@ const getAllProduct = async (req, res) => {
 // }
 
 module.exports = {
-    createProduct, updateProduct, getDetailsProduct, deleteProduct, getAllProduct, deleteMany
+    createProduct, updateProduct, getDetailsProduct, deleteProduct, getAllProduct, deleteMany, getAllType
 }

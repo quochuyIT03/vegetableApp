@@ -25,7 +25,6 @@ const NavbarComponent = () => {
                 )
                 case 'star':
                     return options.map((option) => {
-                        console.log('check', option)
                         return (
                             
                             <div style={{display: 'flex', gap:'12px'}}>
@@ -36,15 +35,10 @@ const NavbarComponent = () => {
                     })
                 case 'price':
                     return options.map((option) => {
-                        console.log('check', option)
                         return (
                             <WarpperTextPrice>{option}</WarpperTextPrice>
                         )
-                    })
-
-                            
-
-             
+                    }) 
             default: 
                 return {}
         }

@@ -47,17 +47,34 @@ const SignUpPage = () => {
     // const {data, isLoading} = mutation
 
     useEffect(() => {
-        if(isSuccess){
-            message.success()
-            handleNavigateSignIn()
-        }else if(Error) {
-            message.error()
-        }
-            
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isSuccess, isError])
+    if (isSuccess) {
+        message.success();
+        handleNavigateSignIn();
+    } else if (isError) {
+        message.error();
+    }
+}, [isSuccess, isError, handleNavigateSignIn]);
 
+const isValidEmail = (email) => {
+    // Sử dụng biểu thức chính quy để kiểm tra định dạng email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
     const handleSignUp = () => {
+        if (!email || !password || !confirmPassword) {
+            message.error('Vui lòng nhập đầy đủ thông tin');
+            return;
+        }
+        // Kiểm tra định dạng email hợp lệ
+        if (!isValidEmail(email)) {
+            message.error('Vui lòng nhập địa chỉ email hợp lệ');
+            return;
+        }
+        // Kiểm tra xác nhận mật khẩu
+        if (password !== confirmPassword) {
+            message.error('Mật khẩu xác nhận không trùng khớp');
+            return;
+        }
         mutation.mutate({ email, password, confirmPassword })
         console.log('sign-up',email, password, confirmPassword )
     }

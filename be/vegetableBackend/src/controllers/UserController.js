@@ -187,6 +187,7 @@ const logoutUser = async (req, res) => {
     }
 }
 
+
 module.exports = {
     createUser, loginUser, updateUser, deleteUser, getAllUser, getDetailsUser, refreshToken, logoutUser, deleteMany
 }

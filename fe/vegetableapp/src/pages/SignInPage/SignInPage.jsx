@@ -8,7 +8,7 @@ import {
     EyeFilled, EyeInvisibleFilled
    
   } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import * as UserService from '../../services/UserService'
 import { useMutationHooks } from '../../hooks/useMutationHook'
 // import Loading from '../../components/LoadingCoponent/LoadingCoponent'
@@ -19,6 +19,7 @@ import { updateUser } from '../../redux/slides/userSlide'
 const SignInPage = () => {
     const [isShowPassword, setIsShowPassword] = useState(false)
     const [email, setEmail] = useState('');
+    const location = useLocation()
     const [password, setPassword] = useState('');
     const disPatch = useDispatch();
     const navigate = useNavigate()
@@ -29,9 +30,32 @@ const SignInPage = () => {
     const { data, isSuccess } = mutation
     // const { data, isLoading } = mutation
 
+    // useEffect(() => {
+    //   console.log('location', location)
+    //   const handleSuccessfulLogin = async () => {
+    //     if (isSuccess) {
+    //       localStorage.setItem('access_token', JSON.stringify(data?.access_token));
+    //       if (data?.access_token) {
+    //         const decoded = jwtDecode(data?.access_token);
+    //         console.log('decode', decoded);
+    //         if (decoded?.id) {
+    //           handleGetDetailsUser(decoded?.id, data?.access_token);
+    //           navigate('/');
+    //         }
+    //       }
+    //     }
+    //   };
+    
+    //   handleSuccessfulLogin();
+    // }, [isSuccess]);
+
     useEffect(() => {
       if(isSuccess) {
-        navigate('/')
+        if(location?.state) {
+          navigate(location?.state)
+        }else{
+          navigate('/')
+        }
         localStorage.setItem('access_token', JSON.stringify(data?.access_token))
         if(data?.access_token){
           const decoded = jwtDecode(data?.access_token)
@@ -42,9 +66,9 @@ const SignInPage = () => {
           }
         }
       }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSuccess])
-
+////////////////////////////////////////////////////////////////////////////////////////
     const handleGetDetailsUser = async (id, token) => {
       const res = await UserService.getDetailsUser(id, token)
       disPatch(updateUser({...res?.data, access_token: token}))
@@ -71,7 +95,11 @@ const SignInPage = () => {
   }
 
   return (
-    <div style={{display:'flex', alignItems: 'center', justifyContent:'center', background: '#ccc', height:'100vh'}}>
+    <div style={{display:'flex',
+                alignItems: 'center', 
+                justifyContent:'center',
+                background: '#eee',
+                height:'100vh'}}>
         <div style={{width: '800px', height:'445px', borderRadius:'6px', background: '#fff', display:'flex'}} >
       <WrapperContainerLeft>
         <h1>Xin Chào</h1>

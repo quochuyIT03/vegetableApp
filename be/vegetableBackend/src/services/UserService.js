@@ -7,10 +7,10 @@ const createUser = (newUser) => {
         const {name, email, password, confirmPassword, phone} = newUser
         try{
             const checkUser = await User.findOne({
-                email: email
+                _email: email
             })
             if(checkUser !== null) {
-                resolse({
+                resolve({
                     status: 'ERR',
                     message: 'The email is already'
                 })
@@ -23,7 +23,7 @@ const createUser = (newUser) => {
                 phone
             })
             if(createdUser){
-                resolse({
+                resolve({
                     status: 'OK', 
                     message: 'SUCCESS',
                     data: createdUser,

@@ -7,7 +7,7 @@ import {
   } from '@ant-design/icons';
 import logo from '../../assets/images/abcs.png'
 import { useNavigate } from 'react-router-dom';
-
+import { fomatall } from "../../fomatall";
 
 const CardComponent = (props) => {
   const {name, price, image, description, countInStock, rating, type, sale, discount, id} = props
@@ -15,6 +15,10 @@ const CardComponent = (props) => {
   const handleDetailsProduct = (id) => {
         navigate(`/product-details/${id}`)
   }
+  const formattedPrice = fomatall(price);
+  // Tính giá sau khi giảm giá
+  const discountedPrice = price - (price * (discount / 100));
+
   return (
     <WrapperCardStyle
     hoverable
@@ -30,7 +34,7 @@ const CardComponent = (props) => {
     style={{
       width: 210,
     }}
-    cover={<img alt="example" src={image} />}
+    cover={<img alt="ảnh" src={image} />}
     onClick={() => handleDetailsProduct(id)}
   >
     <Image preview ={false} src= {logo} style={{width: '68px', height: '14px'}}/>
@@ -43,11 +47,19 @@ const CardComponent = (props) => {
    
     </WrapperReporText>
     <WrapperPriceText> 
-      <span style={{marginRight: '8px'}}>{price.toLocaleString('vi',{style : 'currency', currency :'VND'})} </span>
-      <WrapperPriceDiscountText>
-       -{discount || 10 }%
-    </WrapperPriceDiscountText>
-
+      {/* Hiển thị giá trước khi giảm giá */}
+      <span style={{marginRight: '8px'}}>
+        {discount > 0 ? <del>{formattedPrice}</del> : formattedPrice}
+      </span>
+      {/* Kiểm tra nếu discount > 0 thì mới hiển thị giảm giá và giá sau khi giảm giá */}
+      {discount > 0 && (
+        <>
+          <WrapperPriceDiscountText>
+            -{discount}%<br />
+          </WrapperPriceDiscountText>
+          <span>{fomatall(discountedPrice)} </span>
+        </>
+      )}
     </WrapperPriceText>
     
   </WrapperCardStyle>

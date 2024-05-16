@@ -10,6 +10,7 @@ export const loginUser = async (data) => {
 export const signupUser = async (data) => {
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-up`, data)
     return res.data
+    
 }
 
 export const getDetailsUser = async (id, access_token) => {
@@ -62,3 +63,15 @@ export const deleteManyUser = async (data, access_token) => {
     })
     return res.data
 }
+export const checkEmailExists = async (email) => {
+    try {
+        // Gọi API kiểm tra email tồn tại trong hệ thống
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/check-email`, { email });
+
+        // Trả về true nếu email đã tồn tại trong hệ thống
+        return response.data.exists;
+    } catch (error) {
+        // Xử lý lỗi nếu có
+        throw new Error('Không thể kiểm tra email: ' + error.message);
+    }
+};

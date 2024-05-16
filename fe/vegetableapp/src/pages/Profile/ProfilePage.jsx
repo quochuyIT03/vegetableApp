@@ -96,7 +96,7 @@ const ProfilePage = () => {
                     padding: '2px 6px 6px'
                     }}
                     textButton = {'Cập nhật'}
-                    styleTextButton ={{color: 'rgb(26, 148, 255)', fontSize: '15px', fontWeight: '700'}}
+                    styleTextButton ={{color: '#089f25', fontSize: '15px', fontWeight: '700'}}
         > </ButtonComponent>
         </WrapperInput>
 
@@ -114,7 +114,7 @@ const ProfilePage = () => {
                     padding: '2px 6px 6px'
                     }}
                     textButton = {'Cập nhật'}
-                    styleTextButton ={{color: 'rgb(26, 148, 255)', fontSize: '15px', fontWeight: '700'}}
+                    styleTextButton ={{color: '#089f25', fontSize: '15px', fontWeight: '700'}}
         > </ButtonComponent>
         </WrapperInput>
 
@@ -132,7 +132,7 @@ const ProfilePage = () => {
                     padding: '2px 6px 6px'
                     }}
                     textButton = {'Cập nhật'}
-                    styleTextButton ={{color: 'rgb(26, 148, 255)', fontSize: '15px', fontWeight: '700'}}
+                    styleTextButton ={{color: '#089f25', fontSize: '15px', fontWeight: '700'}}
         > </ButtonComponent>
         </WrapperInput>
 
@@ -150,7 +150,7 @@ const ProfilePage = () => {
                     padding: '2px 6px 6px'
                     }}
                     textButton = {'Cập nhật'}
-                    styleTextButton ={{color: 'rgb(26, 148, 255)', fontSize: '15px', fontWeight: '700'}}
+                    styleTextButton ={{color: '#089f25', fontSize: '15px', fontWeight: '700'}}
         > </ButtonComponent>
         </WrapperInput>
 
@@ -179,7 +179,7 @@ const ProfilePage = () => {
                     padding: '2px 6px 6px'
                     }}
                     textButton = {'Cập nhật'}
-                    styleTextButton ={{color: 'rgb(26, 148, 255)', fontSize: '15px', fontWeight: '700'}}
+                    styleTextButton ={{color: '#089f25', fontSize: '15px', fontWeight: '700'}}
         > </ButtonComponent>
         </WrapperInput>
       

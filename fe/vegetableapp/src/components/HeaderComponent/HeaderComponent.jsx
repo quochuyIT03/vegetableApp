@@ -10,12 +10,14 @@ import { resetUser } from '../../redux/slides/userSlide';
 import Loading from '../LoadingCoponent/LoadingCoponent';
 import { useEffect } from 'react';
 import { searchProduct } from '../../redux/slides/productSlide';
+import logo from '../../assets/images/logo.png'
 
 const HeaderComponent = ({ isHiddenSearch = false, isHiddencart = false }) => {
   const navigate = useNavigate()
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch();
   const [userName, setUserName] = useState('')
+  const order = useSelector((state) => state.order)
   const [userAvatar, setUserAvatar] = useState('')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
@@ -57,10 +59,11 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddencart = false }) => {
   }
 
   return (
-    <div style={{ width: '100%', background: 'rgb(26, 148, 255)', display: 'flex', justifyContent: 'center' }}>
+    <div style={{ width: '100%', background: '#195f07', display: 'flex', justifyContent: 'center' }}>
       <WrapperHeader style={{ justifyContent: isHiddenSearch && isHiddencart && !user?.isAdmin ? 'space-between' : 'unset' }}>
-        <Col span={5}>
-          <WrapperTextHeader onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>OASIS VEGETABLE</WrapperTextHeader>
+        <Col span={5} style={{display: 'flex'}}>
+          <WrapperTextHeader onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>OASIS VEGETABLE  </WrapperTextHeader>
+          <img style={{height: '30px' }} src={logo} alt="logo"></img>
         </Col>
         {!isHiddenSearch && !user?.isAdmin && (
           <Col span={12}>
@@ -106,14 +109,12 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddencart = false }) => {
             </WrapperHeaderAccount>
           </Loading>
           {!isHiddencart && !user?.isAdmin && (
-            <div>
-              <div>
-                <Badge count={9} size="small">
+              <div onClick={() => navigate('/order')} style={{ cursor: 'pointer' }}  >
+                <Badge count={order?.orderItems?.length} size="small">
                   <ShoppingCartOutlined style={{ fontSize: '30px', color: '#fff' }} />
                 </Badge>
                 <WrapperTextHeaderSmall>Giỏ hàng</WrapperTextHeaderSmall>
               </div>
-            </div>
           )}
         </Col>
       </WrapperHeader>

@@ -17,7 +17,6 @@ import { addOrderProduct } from '../../redux/slides/orderSlide';
 
 const ProductDetailsComponent = ({idProduct}) => {
     const [numOfProduct, setNumOfProduct] = useState(1)
-    const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
@@ -31,12 +30,37 @@ const ProductDetailsComponent = ({idProduct}) => {
                 return res.data
             }
     }
-
+    
+const navigate = useNavigate()
+    const handleAddOrder = () => {
+        if(user?.id){
+            // navigate('/sign-in', {state: location?.pathname})
+        }else {
+                // {
+                //     name: { type: String, required: true }, 
+                //     amount: { type: Number, required: true }, 
+                //     image: { type: String, required: true }, 
+                //     price: { type: Number, required: true },
+                //     product: {
+                //         type: mongoose.Schema.Types.ObjectId,
+                //         ref: 'Product',
+                //         require: true,
+                //     },
+                // },
+            dispatch(addOrderProduct({
+                orderItems: {
+                    name: productDetails?.name,
+                    amount: numOfProduct,
+                    image: productDetails?.image,
+                    price: productDetails?.price,
+                    product: productDetails?._id
+                }
+            }))
+        }
+    }
     const handleChangeCount = (type) => {
         if (type === 'increase') {
-            if (numOfProduct < 10) {
-                setNumOfProduct(numOfProduct + 1);
-            }
+            setNumOfProduct(numOfProduct + 1);
         } else {
             if (numOfProduct > 1) {
                 setNumOfProduct(numOfProduct - 1);
@@ -52,24 +76,12 @@ const ProductDetailsComponent = ({idProduct}) => {
       });
       console.log('productDetails',productDetails)
 
-      const handleAddOrderProduct = () => {
-        if(!user?.id){
-           navigate('/sign-in', {state: location?.pathname})
-        }else {
-        dispatch(addOrderProduct({
-            orderItems: {
-                name: productDetails?.name,
-                amount: numOfProduct,
-                image: productDetails?.image,
-                price: productDetails?.price,
-                product: productDetails?._id,
-                discount: productDetails?.discount
-            }
-        }))
-    }
-      }
+   
+
   return (
     <Loading isLoading={isLoading}>
+
+
         <Row style={{padding: '16px', borderRadius:'4px'}}>
             <Col span={10} style={{ borderRight: '2px solid #e5e5e5', paddingRight: '8px' }}> 
                 <Image src = {productDetails?.image} alt="image product" preview={true} />
@@ -106,19 +118,8 @@ const ProductDetailsComponent = ({idProduct}) => {
                     <WrapperStyleTextSell> | Đã bán 1000+ </WrapperStyleTextSell>
                 </div>
                 <WrapperPriceProduct>
-                    <WrapperPriceTextProduct> 
-                        {productDetails?.discount > 0 ? (
-                            <>
-                                <del>{productDetails?.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})}</del>
-                                <br />
-                                {(productDetails?.price * (1 - productDetails?.discount / 100)).toLocaleString('vi', {style : 'currency', currency : 'VND'})}
-                            </>
-                        ) : (
-                            productDetails?.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})
-                        )}
-                    </WrapperPriceTextProduct>
+                    <WrapperPriceTextProduct> {productDetails?.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})} </WrapperPriceTextProduct>
                 </WrapperPriceProduct>
-
 
                 <WrapperAddressProduct>
                     <span>Giao điến</span>
@@ -153,7 +154,7 @@ const ProductDetailsComponent = ({idProduct}) => {
                                 border: 'none',
                                 borderRadius: '4px'
                             }}
-                            onClick={handleAddOrderProduct}
+                            onClick={handleAddOrder}
                             textButton = {'Mua trả trước'}
                             styleTextButton ={{color: '#fff', fontSize: '15px', fontWeight: '700'}}
                         >
