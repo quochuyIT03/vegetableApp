@@ -60,7 +60,9 @@ const handleDeleteUser = () => {
         name: '',
         email: '',
         phone: '',
+        address: '',
         isAdmin: false,
+        avatar: '',
         })
         form.resetFields()
   };
@@ -71,7 +73,9 @@ const handleDeleteUser = () => {
         name: '',
         email: '',
         phone: '',
+        address: '',
         isAdmin: false,
+        avatar: '',
         })
         form.resetFields()
   };
@@ -90,6 +94,8 @@ const [stateUser, setStateUser] = useState({
     email: '',
     phone: '',
     isAdmin: false,
+    avatar: '', 
+    address: ''
 
 })
 /////////////////////////////////////////////////////
@@ -98,6 +104,8 @@ const [stateUserDetails, setstateUserDetails] = useState({
     email: '',
     phone: '',
     isAdmin: false,
+    avatar: '', 
+    address: ''
 })
 //////////////handleOnChangeAvatar////////////
 const handleOnChangeAvatar = async ({fileList}) => {
@@ -107,7 +115,7 @@ const handleOnChangeAvatar = async ({fileList}) => {
     }
     setStateUser({
         ...stateUser,
-        image: file.preview
+        avatar: file.preview
     })
 }
 ////////////////////handleOnChangeAvatarDetails///////////////
@@ -118,7 +126,7 @@ const handleOnChangeAvatarDetails = async ({fileList}) => {
     }
     setstateUserDetails({
         ...stateUserDetails,
-        image: file.preview
+        avatar: file.preview
     })
 }
 const mutationUpdate = useMutationHooks(
@@ -203,25 +211,19 @@ const mutation = useMutationHooks(
     (data) => {
     const { 
         name,
-        description,
-        type,
-        price,
-        rating,
-        image, 
-        countInStock,
-        // discount, 
-        // sale
+        email,
+        isAdmin,
+        phone,
+        address,
+        avatar
     } = data
         const res = UserService.signupUser({
         name,
-        description,
-        type,
-        price,
-        rating,
-        countInStock,
-        image,
-        // discount, 
-        // sale
+        email,
+        isAdmin,
+        phone,
+        address,
+        avatar
         })
         return res
     }
@@ -241,6 +243,9 @@ const fetchGetDetailsUser = async (rowSelected) => {
                 email: res.data.email,
                 phone: res.data.phone,
                 isAdmin: res.data.isAdmin,
+                address: res.data.address,
+                avatar: res.data.avatar,
+
             });
         }
     } catch (error) {
@@ -366,7 +371,8 @@ const getColumnSearchProps = (dataIndex) => ({
       />
     ),
     onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+        record[dataIndex] && record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+      
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);
@@ -410,6 +416,27 @@ const columns = [
       key: 'phone',
       ...getColumnSearchProps('phone')
       
+    },
+    {
+        title: 'Address',
+        dataIndex: 'address',
+        key: 'address',
+        ...getColumnSearchProps('address')
+        
+    },
+    {
+        title: 'Avatar',
+        key: 'avatar',
+        render: (text, record) => (
+            <img src={record.avatar} alt="Avatar" style={{
+                height: '60px', 
+                width: '60px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                marginLeft: '10px'
+            }}/>
+        )
+        
     },
     {
       title: 'Action',
@@ -513,13 +540,13 @@ useEffect(() => {
                 </Form.Item>
 
                 <Form.Item
-                label="Image"
-                name="image"
-                rules={[{ required: true, message: 'Please input your Image!' }]}>
+                label="Avatar"
+                name="avatar"
+                rules={[{ required: true, message: 'Please input your avatar!' }]}>
                 <WrapperUploadFile onChange ={handleOnChangeAvatar} maxCount={1}>
                     <Button icon={ <UploadOutlined/>} >Select File</Button>
-                    {stateUser?.image && (
-                    <img src={stateUser?.image} style={{
+                    {stateUser?.avatar && (
+                    <img src={stateUser?.avatar} style={{
                         height: '60px', 
                         width: '60px',
                         borderRadius: '50%',
@@ -582,15 +609,22 @@ useEffect(() => {
                 <InputComponent value={stateUserDetails.isAdmin} onChange={handleOnChangeDetails} name="isAdmin" />
                 </Form.Item>
 
+                <Form.Item
+                label="Address"
+                name="address"
+                rules={[{ required: true, message: 'Please input your address!' }]}
+                >
+                <InputComponent value={stateUserDetails.address} onChange={handleOnChangeDetails} name="address" />
+                </Form.Item>
         
                 <Form.Item
-                label="Image"
-                name="image"
-                rules={[{ required: true, message: 'Please input your Image!' }]}>
+                label="avatar"
+                name="avatar"
+                rules={[{ required: true, message: 'Please input your avatar!' }]}>
                 <WrapperUploadFile onChange ={handleOnChangeAvatarDetails} maxCount={1}>
                     <Button icon={ <UploadOutlined/>} >Select File</Button>
-                    {stateUserDetails?.image && (
-                    <img src={stateUserDetails?.image} style={{
+                    {stateUserDetails?.avatar && (
+                    <img src={stateUserDetails?.avatar} style={{
                         height: '60px', 
                         width: '60px',
                         borderRadius: '50%',

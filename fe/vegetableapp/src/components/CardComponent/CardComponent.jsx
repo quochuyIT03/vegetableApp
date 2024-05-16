@@ -6,24 +6,17 @@ import {
    
   } from '@ant-design/icons';
 import logo from '../../assets/images/abcs.png'
-import img1 from '../../assets/images/bok_choy.jpg'
+import { useNavigate } from 'react-router-dom';
+
 
 const CardComponent = (props) => {
-  const {name, price, image, description, countInStock, rating, type, sale, discount} = props
-
+  const {name, price, image, description, countInStock, rating, type, sale, discount, id} = props
+  const navigate = useNavigate()
+  const handleDetailsProduct = (id) => {
+        navigate(`/product-details/${id}`)
+  }
   return (
     <WrapperCardStyle
-    // hoverable
-    // headStyle={{width: '200px', 
-    //     height: '200px'
-    // }}
-    // style={{
-    //   width: 210,
-      
-    // }}
-    // bodyStyle={{padding: '10px'}}
-    // cover={<img alt="example" src={img1} />}
-
     hoverable
     styles={{
       header: {
@@ -37,8 +30,8 @@ const CardComponent = (props) => {
     style={{
       width: 210,
     }}
-    cover={<img alt="example" src={img1} />}
-    
+    cover={<img alt="example" src={image} />}
+    onClick={() => handleDetailsProduct(id)}
   >
     <Image preview ={false} src= {logo} style={{width: '68px', height: '14px'}}/>
     <StyleNameProduct>{name}</StyleNameProduct>
@@ -50,9 +43,9 @@ const CardComponent = (props) => {
    
     </WrapperReporText>
     <WrapperPriceText> 
-      <span style={{marginRight: '8px'}}>{price} VND</span>
+      <span style={{marginRight: '8px'}}>{price.toLocaleString('vi',{style : 'currency', currency :'VND'})} </span>
       <WrapperPriceDiscountText>
-        {discount || 10 }%
+       -{discount || 10 }%
     </WrapperPriceDiscountText>
 
     </WrapperPriceText>

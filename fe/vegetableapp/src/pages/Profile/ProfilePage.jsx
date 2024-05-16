@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as UserService from '../../services/UserService'
 import { useMutationHooks } from '../../hooks/useMutationHook'
 import { Button, message } from 'antd'
-import { updatelUser } from '../../redux/slides/userSlide'
+import { updateUser } from '../../redux/slides/userSlide'
 import { UploadOutlined } from '@ant-design/icons'
 import { getBase64 } from '../../utils'
 
@@ -23,7 +23,7 @@ const ProfilePage = () => {
             UserService.updateUser(id, rests, access_token)
         }
     )
-    const disPatch = useDispatch()
+    const dispatch = useDispatch()
     // eslint-disable-next-line no-unused-vars
     const { data, isLoading, isSuccess, isError } = mutation
 
@@ -47,7 +47,7 @@ const ProfilePage = () => {
 
     const handleGetDetailsUser = async (id, token) => {
         const res = await UserService.getDetailsUser(id, token)
-        disPatch(updatelUser({...res?.data, access_token: token}))
+        dispatch(updateUser({ ...res?.data, access_token: token }))
       }
 
     const handleOnChangeEmail = (value) => {

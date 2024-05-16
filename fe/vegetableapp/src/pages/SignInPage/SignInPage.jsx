@@ -14,7 +14,7 @@ import { useMutationHooks } from '../../hooks/useMutationHook'
 // import Loading from '../../components/LoadingCoponent/LoadingCoponent'
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from 'react-redux'
-import { updatelUser } from '../../redux/slides/userSlide'
+import { updateUser } from '../../redux/slides/userSlide'
 
 const SignInPage = () => {
     const [isShowPassword, setIsShowPassword] = useState(false)
@@ -47,7 +47,7 @@ const SignInPage = () => {
 
     const handleGetDetailsUser = async (id, token) => {
       const res = await UserService.getDetailsUser(id, token)
-      disPatch(updatelUser({...res?.data, access_token: token}))
+      disPatch(updateUser({...res?.data, access_token: token}))
     }
 
     console.log('mutation', mutation)

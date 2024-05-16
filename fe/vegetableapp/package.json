@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@reduxjs/toolkit": "^2.2.3",
+    "@reduxjs/toolkit": "^2.2.4",
     "@tanstack/react-query": "^5.35.1",
     "@tanstack/react-query-devtools": "^5.35.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.17.0",
+    "antd-table-saveas-excel": "^2.2.1",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "jwt-decode": "^4.0.0",
@@ -47,5 +48,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy" : "http://localhost:3001"
+  "proxy": "http://localhost:3001"
 }

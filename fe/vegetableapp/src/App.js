@@ -6,7 +6,7 @@ import { isJsonString } from './utils'
 import { jwtDecode } from 'jwt-decode' 
 import * as UserService from './services/UserService'
 import { useDispatch, useSelector } from 'react-redux'
-import { updatelUser } from './redux/slides/userSlide'
+import { updateUser } from './redux/slides/userSlide'
 import Loading from './components/LoadingCoponent/LoadingCoponent'
 
 
@@ -52,7 +52,7 @@ function App() {
 
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id, token)
-    disPatch(updatelUser({ ...res?.data, access_token: token}))
+    disPatch(updateUser({ ...res?.data, access_token: token}))
     setIsLoading(false)
   }
 
