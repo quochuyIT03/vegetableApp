@@ -62,7 +62,7 @@ const handleDeleteUser = () => {
         phone: '',
         address: '',
         isAdmin: false,
-        avatar: ''
+        avatar: '',
         })
         form.resetFields()
   };
@@ -75,7 +75,7 @@ const handleDeleteUser = () => {
         phone: '',
         address: '',
         isAdmin: false,
-        avatar: ''
+        avatar: '',
         })
         form.resetFields()
   };
@@ -244,7 +244,8 @@ const fetchGetDetailsUser = async (rowSelected) => {
                 phone: res.data.phone,
                 isAdmin: res.data.isAdmin,
                 address: res.data.address,
-                avatar: res.data.avatar
+                avatar: res.data.avatar,
+
             });
         }
     } catch (error) {
@@ -502,12 +503,11 @@ useEffect(() => {
     <div>
       <WrapperHeader> Quản lí người dùng </WrapperHeader>
       <div style={{ marginTop: '10px' }} >
-      <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} onClick={() => setIsModalOpen(true) } > 
-      <PlusCircleFilled style={{ fontSize: '60px' }} /> </Button>
+      <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} > <PlusCircleFilled style={{ fontSize: '60px' }} /> </Button>
       </div>
       <div style={{ marginTop: '20px' }} >
         {/* <TableComponent products ={products?.data} isLoading={isLoadingProducts} /> */}
-        <TableComponent handleDeleteMany={handleDeleteManyUsers} columns ={columns} isLoading={isLoadingUser} data={dataTable} onRow={(record, rowIndex) => {
+        <TableComponent pagination={{ pageSize: 5 }} handleDeleteMany={handleDeleteManyUsers} columns ={columns} isLoading={isLoadingUser} data={dataTable} onRow={(record, rowIndex) => {
             return {
                 onClick: (event) => {
                     setRowSelected(record._id)
@@ -540,22 +540,6 @@ useEffect(() => {
                 rules={[{ required: true, message: 'Please input your email!' }]}
                 >
                 <InputComponent value={stateUser.email} onChange={handleOnChange} name="email" />
-                </Form.Item>
-
-                <Form.Item
-                label="Password"
-                name="password"
-                rules={[{ required: true, message: 'Please input your password!' }]}
-                >
-                <InputComponent value={stateUser.password} onChange={handleOnChange} name="password" />
-                </Form.Item>
-
-                <Form.Item
-                label="Address"
-                name="address"
-                rules={[{ required: true, message: 'Please input your address!' }]}
-                >
-                <InputComponent value={stateUser.address} onChange={handleOnChange} name="address" />
                 </Form.Item>
 
                 <Form.Item

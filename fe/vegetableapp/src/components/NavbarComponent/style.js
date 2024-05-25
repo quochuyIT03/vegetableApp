@@ -14,6 +14,7 @@ export const WarpperContent = styled.div`
     display: flex; 
     flex-direction: column; 
     gap: 12px;
+    margin-top:10px;
 `
 export const WarpperTextPrice = styled.div`
     padding: 4px; 

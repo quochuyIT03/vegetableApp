@@ -17,7 +17,7 @@ const HomePage = () => {
   const searchProduct = useSelector((state) => state?.product?.search)
   const searchDebounce = useDebounce(searchProduct, 1000)
   // const refSearch = useRef()
-  const [limit, setLimit] = useState(5)
+  const [limit, setLimit] = useState(10)
   // const [limit, setLimit] = useState(5)
   const [loading, setLoading] = useState(false)
   const [typeProducts, setTypeProducts] = useState([])
@@ -71,7 +71,6 @@ const HomePage = () => {
     
     return res
   }
-
   // useEffect(() => {
   //   if(products && products?.data?.length > 0) {
   //     setStateProducts(products?.data) 

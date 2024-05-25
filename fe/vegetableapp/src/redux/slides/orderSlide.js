@@ -4,6 +4,7 @@ const initialState = {
     orderItems: [
        
     ],
+    selectedItems: [],
         shippingAddress: {
             
         },
@@ -60,10 +61,14 @@ export const orderSlide = createSlice ({
             const itemOrders = state?.orderItems?.filter((item) => !checkList.includes(item.product))
             state.orderItems = itemOrders
         },
+        orderSelect: (state, action) => {
+            const { checkList } = action.payload;
+            state.selectedItems = checkList; // Lưu danh sách các mục đã chọn
+          },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addOrderProduct, increaseAmount, decreaseAmount, deleleOrderProduct, deleleManyOrderProduct } = orderSlide.actions
+export const { addOrderProduct, increaseAmount, decreaseAmount, deleleOrderProduct, deleleManyOrderProduct, orderSelect } = orderSlide.actions
 
 export default orderSlide.reducer

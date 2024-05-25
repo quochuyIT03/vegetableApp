@@ -1,8 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { WarpperContent, WarpperLableText, WarpperTextPrice, WarpperTextValue } from './style'
 import { Checkbox, Rate } from 'antd'
+import * as ProductService from '../../services/ProductService'; 
 
 const NavbarComponent = () => {
+    const [productTypes, setProductTypes] = useState([]);
+    useEffect(() => {
+        const fetchProductTypes = async () => {
+          try {
+            const response = await ProductService.getAllTypeProduct();  // Giả định rằng phương thức này tồn tại
+            setProductTypes(response.data);
+          } catch (error) {
+            console.error('Lỗi khi lấy loại sản phẩm:', error);
+          }
+        };
+    
+        fetchProductTypes();
+      }, []);
     const onChange = () => { }
     const renderContent = (type, options) => {
         switch(type){
@@ -45,10 +59,9 @@ const NavbarComponent = () => {
     }
   return (
     <div>
-        <WarpperLableText>Lable</WarpperLableText>
+        <WarpperLableText>LOẠI SẢN PHẨM</WarpperLableText>
         <WarpperContent>
-        {renderContent('text', ['Rau day', 'rau thom', 'rau ngo'])}
-        
+        {renderContent('text', productTypes)}
         </WarpperContent>
         <WarpperContent>
         {renderContent('checkbox', [

@@ -109,17 +109,21 @@ const ProductDetailsComponent = ({idProduct}) => {
                     <WrapperPriceTextProduct> 
                         {productDetails?.discount > 0 ? (
                             <>
-                                <del>{productDetails?.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})}</del>
-                                <br />
+
                                 {(productDetails?.price * (1 - productDetails?.discount / 100)).toLocaleString('vi', {style : 'currency', currency : 'VND'})}
+                                
+                                <del style={{marginLeft:'10px', color:'#cc5454', fontSize:'18px'}}>{productDetails?.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})}</del>
+                               
+                                
                             </>
                         ) : (
                             productDetails?.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})
                         )}
                     </WrapperPriceTextProduct>
                 </WrapperPriceProduct>
-
-
+                <WrapperAddressProduct style={{marginBottom:'30px'}}>
+                    <span >Mô tả: {productDetails?.description}</span>
+                </WrapperAddressProduct>
                 <WrapperAddressProduct>
                     <span>Giao điến</span>
                     <span className='address'> {user?.address} </span>

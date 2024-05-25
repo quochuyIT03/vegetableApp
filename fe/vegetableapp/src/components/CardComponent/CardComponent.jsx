@@ -26,13 +26,16 @@ const CardComponent = (props) => {
       header: {
         width: '200px',
         height: '200px',
+        
       },
       body: {
         padding: '10px',
+        // background:'#efefef'
       },
     }}
     style={{
       width: 210,
+      // background:'#efefef'
     }}
     cover={<img alt="ảnh" src={image} />}
     onClick={() => handleDetailsProduct(id)}
