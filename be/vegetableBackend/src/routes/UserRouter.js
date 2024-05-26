@@ -14,6 +14,8 @@ router.get('/getAll', userController.getAllUser)
 router.get('/get-details/:id', userController.getDetailsUser)
 router.post('/refresh-token', userController.refreshToken)
 router.post('/delete-many', userController.deleteMany)
+router.put('/reset-password', userController.resetPassword)
+router.put('/change-password', userController.changePassword);
 
 module.exports = router
 

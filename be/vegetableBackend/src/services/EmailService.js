@@ -57,7 +57,39 @@ const sendEmailInfoPayment = async (email, orderItems) => {
     console.log("Message sent: %s", info.messageId);
 }
 
+const sendResetPasswordEmail = async (email, resetLink) => {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.MAIL_ACCOUNT,
+            pass: process.env.MAIL_PASSWORD,
+        },
+    });
+
+    let htmlContent = `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+            <h2>Xin chào,</h2>
+            <p>Bạn đã yêu cầu đặt lại mật khẩu cho tài khoản của mình.</p>
+            <p>Vui lòng nhấp vào liên kết dưới đây để đặt lại mật khẩu của bạn:</p>
+            <a href="${resetLink}" style="color: #1a73e8;">Đặt lại mật khẩu</a>
+            <p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
+            <p>Trân trọng,</p>
+            <p>Đội ngũ Hỗ trợ</p>
+        </div>`;
+
+    let info = await transporter.sendMail({
+        from: process.env.MAIL_ACCOUNT,
+        to: email,
+        subject: "Đặt lại mật khẩu",
+        text: `Bạn đã yêu cầu đặt lại mật khẩu. Vui lòng truy cập vào liên kết sau để đặt lại mật khẩu: ${resetLink}`,
+        html: htmlContent,
+    });
+
+    console.log("Reset password email sent: %s", info.messageId);
+};
 module.exports = {
-    sendEmailInfoPayment
+    sendEmailInfoPayment, sendResetPasswordEmail
 }
 

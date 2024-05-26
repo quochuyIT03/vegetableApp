@@ -192,8 +192,49 @@ const getAllOrder = () => {
         }
     })
 }
+const deleteOrder = (id) => {
+    return new Promise(async (resolve, reject) => {
+
+        try {
+            const checkOrder = await Order.findOne({
+                _id: id
+            })
+            if (checkOrder === null) {
+                resolve({
+                    status: 'OK',
+                    message: 'The product is not defined'
+                })
+            }
+
+            await Order.findByIdAndDelete(id)
+            resolve({
+                status: 'OK',
+                message: 'DELETE PRODUCT SUCCESS'
+            })
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+const deleteManyOrder = (ids) => {
+    return new Promise(async (resolve, reject) => {
+
+        try {
+            await Order.deleteMany({ _id: ids })
+            resolve({
+                status: 'OK',
+                message: 'DELETE ORDER SUCCESS'
+            })
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 
 module.exports = {
-    createOrder, getAllOrderDetails, getDetailsOrder, cancelDetailsOrder, getAllOrder
+    createOrder, getAllOrderDetails, getDetailsOrder, cancelDetailsOrder, getAllOrder, deleteOrder, deleteManyOrder,
 
 }

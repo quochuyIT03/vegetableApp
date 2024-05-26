@@ -38,7 +38,7 @@ const getAllOrderDetails = async (req, res) => {
         })
     }
 }
-//Cai nay la get all 
+
 
 const getDetailsOrder = async (req, res) => {
     try {
@@ -87,7 +87,43 @@ const getAllOrder = async (req, res) => {
         })
     }
 }
+const deleteOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        if (!orderId) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The orderId is required'
+            });
+        }
+        const response = await OrderService.deleteOrder(orderId);
+        return res.status(200).json(response);
+    } catch (e) {
+        return res.status(500).json({
+            status: 'ERR',
+            message: 'Error deleting order: ' + e.message
+        });
+    }
+}
+
+const deleteMany = async (req, res) => {
+    try {
+        const ids = req.body.ids
+        if (!ids) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The ids is required'
+            })
+        }
+        const response = await OrderService.deleteManyOrder(ids)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
 
 module.exports = {
-    createOrder, getAllOrderDetails, getDetailsOrder, cancelDetailsOrder, getAllOrder
+    createOrder, getAllOrderDetails, getDetailsOrder, cancelDetailsOrder, getAllOrder, deleteOrder, deleteMany,
 };

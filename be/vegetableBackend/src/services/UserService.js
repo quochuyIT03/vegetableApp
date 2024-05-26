@@ -195,9 +195,80 @@ const getDetailsUser = (id) => {
     })
 }
 
+const resetPassword = async (email) => {
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return {
+                status: 'ERR',
+                message: 'Email không tồn tại'
+            };
+        }
+
+        // Tạo và lưu token vào user
+        const token = crypto.randomBytes(20).toString('hex');
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 giờ
+        await user.save();
+
+        // Trả về token để sử dụng trong gửi email hoặc gửi liên kết đặt lại mật khẩu
+        return {
+            status: 'OK',
+            message: 'SUCCESS',
+            resetToken: token
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
+const getUserByEmail = async (email) => {
+    try {
+        const user = await User.findOne({ email });
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const changePassword = async (email, newPassword) => {
+    try {
+        console.log(`Received request to change password for email: ${email}`);
+
+        // Tìm người dùng dựa trên email
+        const user = await User.findOne({ email });
+
+        // Nếu không tìm thấy người dùng
+        if (!user) {
+            console.log(`User with email ${email} not found`);
+            return {
+                status: 'ERR',
+                message: 'Email không tồn tại'
+            };
+        }
+
+        // Hash mật khẩu mới
+        const hash = bcrypt.hashSync(newPassword, 10);
+
+        // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+        user.password = hash;
+        await user.save();
+
+        console.log(`Password for email ${email} changed successfully`);
+
+        return {
+            status: 'OK',
+            message: 'Đổi mật khẩu thành công'
+        };
+    } catch (error) {
+        console.error(`Error changing password for email ${email}:`, error);
+        throw error;
+    }
+}
+
 
 
 module.exports = {
-    createUser, loginUser, updateUser, deleteUser, getAllUser, getDetailsUser, deleteManyUser
+    createUser, loginUser, updateUser, deleteUser, getAllUser, getDetailsUser, deleteManyUser, resetPassword, getUserByEmail, changePassword
 }
 

@@ -207,7 +207,25 @@ const getAllType = () => {
     })
 }
 
+const getAllRating = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const allRating = await Product.distinct('rating')
+
+            resolve({
+                status: 'OK',
+                message: 'SUCCESS',
+                data: allRating,
+            })
+
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
-    createProduct, updateProduct, getDetailsProduct, deleteProduct, getAllProduct, deleteManyProduct, getAllType
+    createProduct, updateProduct, getDetailsProduct, deleteProduct, getAllProduct, deleteManyProduct, getAllType, getAllRating,
 }
 
