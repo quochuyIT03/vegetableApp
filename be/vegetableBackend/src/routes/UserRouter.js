@@ -18,8 +18,3 @@ router.put('/reset-password', userController.resetPassword)
 router.put('/change-password', userController.changePassword);
 
 module.exports = router
-
-
-// router.put('/update-user/:id', authUserMiddleware ,userController.updateUser)
-// router.get('/get-details/:id', authUserMiddleware, userController.getDetailsUser)
-// router.delete('/delete-user/:id', authMiddleware , userController.deleteUser)
