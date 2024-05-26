@@ -14,10 +14,11 @@ import { useSelector } from 'react-redux';
 import { getBase64 } from '../../utils';
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import { useQuery } from '@tanstack/react-query';
-import * as message from '../../components/Message/Message'
+import * as message from '../Message/Message'
 import * as UserService from '../../services/UserService'
+import * as OrderService from '../../services/OrderService'
 
-const AdminUser = () => {
+const AdminOrder = () => {
     ////////////isModelOpen///////////////////////
     const [isModalOpen, setIsModalOpen] = useState(false);
     ////////////////////////////////////////////////////
@@ -49,7 +50,7 @@ const AdminUser = () => {
     const handleDeleteUser = () => {
         mutationDeleted.mutate({ id: rowSelected, token: user?.access_token }, {
             onSettled: () => {
-                queryUser.refetch()
+                queryOrder.refetch()
             }
         })
     }
@@ -84,7 +85,7 @@ const AdminUser = () => {
         mutation.mutate(stateUser)
         console.log('finish', stateUser, {
             onSettled: () => {
-                queryUser.refetch()
+                queryOrder.refetch()
             }
         })
     }
@@ -160,13 +161,13 @@ const AdminUser = () => {
         },
     )
     ///////////////////////////////////////////////////////
-    const handleDeleteManyUsers = (ids) => {
-        mutationDeletedMany.mutate({ ids: ids, token: user?.access_token }, {
-            onSettled: () => {
-                queryUser.refetch()
-            }
-        })
-    }
+    // const handleDeleteManyUsers = (ids) => {
+    //     mutationDeletedMany.mutate({ ids: ids, token: user?.access_token }, {
+    //         onSettled: () => {
+    //             queryUser.refetch()
+    //         }
+    //     })
+    // }
     ///////////////////////////////////////////////////////
     const mutationDeleted = useMutationHooks(
         (data) => {
@@ -183,14 +184,14 @@ const AdminUser = () => {
         },
     )
     /////////////////////////////////////////////////////
-    console.log('user', user)
-    const onUpdateUser = () => {
-        mutationUpdate.mutate({ id: rowSelected, token: user?.access_token, ...stateUserDetails }, {
-            onSettled: () => {
-                queryUser.refetch()
-            }
-        })
-    }
+    // console.log('user', user)
+    // const onUpdateUser = () => {
+    //     mutationUpdate.mutate({ id: rowSelected, token: user?.access_token, ...stateUserDetails }, {
+    //         onSettled: () => {
+    //             queryUser.refetch()
+    //         }
+    //     })
+    // }
     ////////////handleOnChange/////////////////////////////
     const handleOnChange = (e) => {
         setStateUser({
@@ -229,8 +230,8 @@ const AdminUser = () => {
         }
     )
     ////////////////////////////////////////////////////////
-    const getAllUsers = async () => {
-        const res = await UserService.getAllUser(user?.access_token)
+    const getAllOrder = async () => {
+        const res = await OrderService.getAllOrder(user?.access_token)
         return res
     }
     ///////////////////////////////////////////////////////
@@ -288,17 +289,10 @@ const AdminUser = () => {
     console.log('dataUpdated', dataUpdated)
     ///////////////////////////////////////////////////////////
     // const {isLoading: isLoadingProducts, data: products} = useQuery({queryKey: ['products'], queryFn:getAllProducts})
-    const queryUser = useQuery({ queryKey: ['user'], queryFn: getAllUsers })
-    const { isLoading: isLoadingUser, data: users } = queryUser
+    const queryOrder = useQuery({ queryKey: ['orders'], queryFn: getAllOrder })
+    const { isLoading: isLoadingOrders, data: orders } = queryOrder
     ////////////////////////////////////////////////////////
-    const renderAction = () => {
-        return (
-            <div>
-                <DeleteOutlined style={{ color: 'rgb(168 15 15 / 83%)', fontSize: '30px', cursor: 'pointer' }} onClick={() => setIsModalOpenDelete(true)} />
-                <EditOutlined style={{ color: 'rgb(4 122 110 / 83%)', fontSize: '30px', cursor: 'pointer' }} onClick={handleDetailsUser} />
-            </div>
-        )
-    }
+
     //////////////////////////////HandleSearch///////////////////////////////////////////
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -385,45 +379,26 @@ const AdminUser = () => {
     //     return {...user, key: user._id, isAdmin: user.isAdmin ? 'Admin' : 'User'}
     //   })
 
-    const dataTable = users?.data?.length && users?.data?.map((user) => {
-        return { ...user, key: user._id, isAdmin: user.isAdmin };
+    const dataTable = orders?.data?.length && orders?.data?.map((order) => {
+        return {
+            ...order, key: order._id, userName: order?.shippingAddress?.fullName,
+            phone: order?.shippingAddress?.phone,
+            address: order?.shippingAddress?.address,
+            city: order?.shippingAddress?.city,
+            paymentMethod: order?.paymentMethod,
+            totalPrice: order?.totalPrice,
+        };
     });
-    console.log('users', users)
+    console.log('users', orders)
     ////////////////////////////////////////////////////////
     const columns = [
         {
             title: 'User Name',
-            dataIndex: 'name',
-            key: 'name',
-            sorter: (a, b) => a.name.localeCompare(b.name),
-            ...getColumnSearchProps('name')
+            dataIndex: 'userName',
+            key: 'userName',
+            sorter: (a, b) => a.userName.localeCompare(b.userName),
+            ...getColumnSearchProps('userName')
         },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-            ...getColumnSearchProps('email')
-        },
-        {
-            title: 'Role',
-            dataIndex: 'isAdmin',
-            key: 'isAdmin',
-            filters: [
-                {
-                    text: 'Admin',
-                    value: true,
-                },
-                {
-                    text: 'User',
-                    value: false,
-                },
-            ],
-            onFilter: (value, record) => record.isAdmin === value,
-            render: (text, record) => (
-                <span>{record.isAdmin ? 'Admin' : 'User'}</span>
-            ),
-        },
-
         {
             title: 'Phone',
             dataIndex: 'phone',
@@ -439,24 +414,28 @@ const AdminUser = () => {
 
         },
         {
-            title: 'Avatar',
-            key: 'avatar',
-            render: (text, record) => (
-                <img src={record.avatar} alt="Avatar" style={{
-                    height: '60px',
-                    width: '60px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    marginLeft: '10px'
-                }} />
-            )
+            title: 'City',
+            dataIndex: 'city',
+            key: 'city',
+            ...getColumnSearchProps('city')
 
         },
         {
-            title: 'Action',
-            dataIndex: 'Action',
-            render: renderAction,
+            title: 'paymentMethod',
+            dataIndex: 'paymentMethod',
+            key: 'paymentMethod',
+            ...getColumnSearchProps('paymentMethod')
+
         },
+        {
+            title: 'totalPrice',
+            dataIndex: 'totalPrice',
+            key: 'totalPrice',
+            sorter: (a, b) => a.totalPrice - b.totalPrice,
+            ...getColumnSearchProps('totalPrice')
+
+        },
+
     ];
 
 
@@ -501,171 +480,16 @@ const AdminUser = () => {
     //////////////////////////////////////////////////////////////////////////////////////////////////   
     return (
         <div>
-            <WrapperHeader> Quản lí người dùng </WrapperHeader>
+            <WrapperHeader> Quản lí đơn hàng </WrapperHeader>
             <div style={{ marginTop: '10px' }} >
-                {/* <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} > <PlusCircleFilled style={{ fontSize: '60px' }} /> </Button> */}
+
             </div>
             <div style={{ marginTop: '20px' }} >
                 {/* <TableComponent products ={products?.data} isLoading={isLoadingProducts} /> */}
-                <TableComponent pagination={{ pageSize: 5 }} handleDeleteMany={handleDeleteManyUsers} columns={columns} isLoading={isLoadingUser} data={dataTable} onRow={(record, rowIndex) => {
-                    return {
-                        onClick: (event) => {
-                            setRowSelected(record._id)
-                        } // click row
-                    };
-                }} />
+                <TableComponent pagination={{ pageSize: 5 }} columns={columns} isLoading={isLoadingOrders} data={dataTable} />
             </div>
-            {/* -----------------------------------TẠO NGƯỜI DÙNG------------------------------------------------------- */}
-            <ModalComponent forceRender title="Tạo người dùng mới" open={isModalOpen} onCancel={handleCancel} onOk={handleOk} okButtonProps={{ display: 'none' }} footer={null} >
-                {/* <Loading isLoading={isLoading}> */}
-                <Form
-                    name="basic"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 18 }}
-                    style={{ maxWidth: 600 }}
-                    form={form}
-                    onFinish={onFinish}
-                    autoComplete="off">
-                    <Form.Item
-                        label="User Name"
-                        name="name"
-                        rules={[{ required: true, message: 'Please input your user name!' }]}
-                    >
-                        <InputComponent value={stateUser.name} onChange={handleOnChange} name="name" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={[{ required: true, message: 'Please input your email!' }]}
-                    >
-                        <InputComponent value={stateUser.email} onChange={handleOnChange} name="email" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Phone"
-                        name="phone"
-                        rules={[{ required: true, message: 'Please input your phone!' }]}
-                    >
-                        <InputComponent value={stateUser.phone} onChange={handleOnChange} name="phone" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Avatar"
-                        name="avatar"
-                        rules={[{ required: true, message: 'Please input your avatar!' }]}>
-                        <WrapperUploadFile onChange={handleOnChangeAvatar} maxCount={1}>
-                            <Button icon={<UploadOutlined />} >Select File</Button>
-                            {stateUser?.avatar && (
-                                <img src={stateUser?.avatar} style={{
-                                    height: '60px',
-                                    width: '60px',
-                                    borderRadius: '50%',
-                                    objectFit: 'cover',
-                                    marginLeft: '10px'
-                                }} alt="avatar" />
-                            )}
-                        </WrapperUploadFile>
-                    </Form.Item>
-
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
-                            Create User
-                        </Button>
-                    </Form.Item>
-
-                </Form>
-                {/* </Loading> */}
-            </ModalComponent>
-            {/* ========================================Phần chi tiết User============================================ */}
-            <DrawerComponent title='Chi tiết người dùng' isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="75%">
-                <Loading isLoading={isLoadingUpdate || isLoadingUpdate}>
-                    <Form
-                        name="basic"
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 22 }}
-                        style={{ maxWidth: 600 }}
-                        form={form}
-                        onFinish={onUpdateUser}
-                        autoComplete="on">
-                        <Form.Item
-                            label="User Name"
-                            name="name"
-                            rules={[{ required: true, message: 'Please input your user name!' }]}
-                        >
-                            <InputComponent value={stateUserDetails.name} onChange={handleOnChangeDetails} name="name" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Email"
-                            name="email"
-                            rules={[{ required: true, message: 'Please input your email!' }]}
-                        >
-                            <InputComponent value={stateUserDetails.email} onChange={handleOnChangeDetails} name="email" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Phone"
-                            name="phone"
-                            rules={[{ required: true, message: 'Please input your phone!' }]}
-                        >
-                            <InputComponent value={stateUserDetails.phone} onChange={handleOnChangeDetails} name="phone" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="IsAdmin"
-                            name="isAdmin"
-                            rules={[{ required: true, message: 'Please input your isAdmin!' }]}
-                        >
-                            <InputComponent value={stateUserDetails.isAdmin} onChange={handleOnChangeDetails} name="isAdmin" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Address"
-                            name="address"
-                            rules={[{ required: true, message: 'Please input your address!' }]}
-                        >
-                            <InputComponent value={stateUserDetails.address} onChange={handleOnChangeDetails} name="address" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="avatar"
-                            name="avatar"
-                            rules={[{ required: true, message: 'Please input your avatar!' }]}>
-                            <WrapperUploadFile onChange={handleOnChangeAvatarDetails} maxCount={1}>
-                                <Button icon={<UploadOutlined />} >Select File</Button>
-                                {stateUserDetails?.avatar && (
-                                    <img src={stateUserDetails?.avatar} style={{
-                                        height: '60px',
-                                        width: '60px',
-                                        borderRadius: '50%',
-                                        objectFit: 'cover',
-                                        marginLeft: '10px'
-                                    }} alt="avatar" />
-                                )}
-                            </WrapperUploadFile>
-                        </Form.Item>
-
-                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button type="primary" htmlType="submit">
-                                Modify
-                            </Button>
-                        </Form.Item>
-
-                    </Form>
-                </Loading>
-            </DrawerComponent>
-
-            {/* ===========================================Phần xóa người dùng============================================================== */}
-            <ModalComponent forceRender title="Xóa người dùng" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={handleDeleteUser} >
-                {/* <Loading isLoading={isLoadingDeleted}> */}
-                <div>
-                    Bạn có muốn xóa người dùng này không?
-                </div>
-                {/* </Loading> */}
-            </ModalComponent>
         </div>
     )
 }
 
-export default AdminUser
+export default AdminOrder

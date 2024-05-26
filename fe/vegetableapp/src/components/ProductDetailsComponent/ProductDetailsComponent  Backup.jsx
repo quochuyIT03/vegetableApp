@@ -1,4 +1,4 @@
-import { Col, Image, Rate, Row } from 'antd'
+import { Col, Image, Rate, Row, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import {
     WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct,
@@ -14,10 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 import Loading from '../LoadingCoponent/LoadingCoponent'
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addOrderProduct } from '../../redux/slides/orderSlide';
-import LikeButtonComponent from '../LikeButtonComponent/LikeButtonComponent';
-import CommentComponent from '../LikeButtonComponent/CommentComponent';
-import { initFacebookSDK } from '../../utils';
+import { addOrderProduct, resetOrder } from '../../redux/slides/orderSlide';
 
 
 const ProductDetailsComponent = ({ idProduct }) => {
@@ -25,8 +22,10 @@ const ProductDetailsComponent = ({ idProduct }) => {
     const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch()
+    const product = useSelector((state) => state.product)
     const user = useSelector((state) => state.user)
-
+    const order = useSelector((state) => state.order)
+    const [errorLimitOrder, setErrorLimitOrder] = useState(false)
     const onChange = (e) => {
         setNumOfProduct(Number(e))
     }
@@ -37,19 +36,37 @@ const ProductDetailsComponent = ({ idProduct }) => {
             return res.data
         }
     }
+    useEffect(() => {
+        const orderRedux = order?.orderItems?.find((item) => item.product === productDetails?._id)
+        if ((orderRedux?.amount + numOfProduct) <= orderRedux?.countInStock || !orderRedux) {
+            setErrorLimitOrder(false)
+        } else {
+            setErrorLimitOrder(true)
+        }
+    }, [numOfProduct])
 
     useEffect(() => {
-        initFacebookSDK()
-    }, [])
+        if (order.isSuccessOrder) {
+            message.success('Sản phẩm đã được thêm vào giỏ hàng')
+        }
+        return () => {
+            dispatch(resetOrder())
+        }
+    }, [order.isSuccessOrder])
 
-    const handleChangeCount = (type) => {
+    const handleChangeCount = (type, limited) => {
         if (type === 'increase') {
-            if (numOfProduct < 10) {
+            if (!limited) {
+                // if (numOfProduct < 10) {
                 setNumOfProduct(numOfProduct + 1);
+                // }
             }
+
         } else {
-            if (numOfProduct > 1) {
+            if (!limited) {
+                // if (numOfProduct > 1) {
                 setNumOfProduct(numOfProduct - 1);
+                // }
             }
         }
     }
@@ -66,18 +83,28 @@ const ProductDetailsComponent = ({ idProduct }) => {
         if (!user?.id) {
             navigate('/sign-in', { state: location?.pathname })
         } else {
-            dispatch(addOrderProduct({
-                orderItems: {
-                    name: productDetails?.name,
-                    amount: numOfProduct,
-                    image: productDetails?.image,
-                    price: productDetails?.price,
-                    product: productDetails?._id,
-                    discount: productDetails?.discount
-                }
-            }))
+            const orderRedux = order?.orderItems?.find((item) => item.product === productDetails?._id)
+            if ((orderRedux?.amount + numOfProduct) <= orderRedux?.countInStock) {
+                dispatch(addOrderProduct({
+                    orderItems: {
+                        name: productDetails?.name,
+                        amount: numOfProduct,
+                        image: productDetails?.image,
+                        price: productDetails?.price,
+                        product: productDetails?._id,
+                        discount: productDetails?.discount,
+                        countInStock: productDetails?.countInStock
+                    }
+                }))
+            } else {
+                setErrorLimitOrder(true)
+            }
+
         }
     }
+
+
+
     return (
         <Loading isLoading={isLoading}>
             <Row style={{ padding: '16px', borderRadius: '4px' }}>
@@ -110,7 +137,8 @@ const ProductDetailsComponent = ({ idProduct }) => {
                     <WrapperStyleNameProduct> {productDetails?.name} </WrapperStyleNameProduct>
                     <div>
                         <Rate allowHalf defaultValue={productDetails?.rating} value={productDetails?.rating} />
-                        <WrapperStyleTextSell> | Đã bán 1000+ </WrapperStyleTextSell>
+                        <WrapperStyleTextSell> | Số lượng trong kho: {productDetails?.countInStock} </WrapperStyleTextSell>
+                        <WrapperStyleTextSell> | Đã bán: {productDetails?.sale} </WrapperStyleTextSell>
                     </div>
                     <WrapperPriceProduct>
                         <WrapperPriceTextProduct>
@@ -128,7 +156,6 @@ const ProductDetailsComponent = ({ idProduct }) => {
                             )}
                         </WrapperPriceTextProduct>
                     </WrapperPriceProduct>
-
                     <WrapperAddressProduct style={{ marginBottom: '30px' }}>
                         <span >Mô tả: {productDetails?.description}</span>
                     </WrapperAddressProduct>
@@ -138,40 +165,46 @@ const ProductDetailsComponent = ({ idProduct }) => {
                         <span className='change-address'> -Đổi địa chỉ</span>
                     </WrapperAddressProduct>
 
-                    <LikeButtonComponent dataHref={"https://developers.facebook.com/docs/plugins/"} />
 
                     <div style={{ margin: '10px 0 20px', borderTop: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '10px 0' }}>
                         <div style={{ marginBottom: '6px' }}> Số lượng </div>
                         <WrapperQualityProduct>
 
-                            <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('decrease')}>
+                            <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('decrease', numOfProduct === 1)}>
                                 <MinusOutlined style={{ color: '#000', fontSize: '20px' }} />
                             </button>
 
-                            <WrapperInputNumber min={1} max={10} defaultValue={1} onChange={onChange} value={numOfProduct} size="small" />
+                            <WrapperInputNumber min={1} max={productDetails?.countInStock} defaultValue={1} onChange={onChange} value={numOfProduct} size="small" />
 
-                            <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('increase')} >
+                            <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('increase', numOfProduct === productDetails?.countInStock)} >
                                 <PlusOutlined style={{ color: '#000', fontSize: '20px' }} />
                             </button>
 
                         </WrapperQualityProduct>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <ButtonComponent
-                            size={40}
-                            styleButton={{
-                                background: 'rgb(255, 57, 69)',
-                                height: '48px',
-                                width: '220px',
-                                border: 'none',
-                                borderRadius: '4px'
-                            }}
-                            onClick={handleAddOrderProduct}
-                            textButton={'Mua trả trước'}
-                            styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
-                        >
+                        <div>
 
-                        </ButtonComponent>
+
+                            <ButtonComponent
+                                size={40}
+                                styleButton={{
+                                    background: 'rgb(255, 57, 69)',
+                                    height: '48px',
+                                    width: '220px',
+                                    border: 'none',
+                                    borderRadius: '4px'
+                                }}
+
+                                onClick={handleAddOrderProduct}
+                                textButton={'Mua trả trước'}
+                                styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
+                            >
+
+                            </ButtonComponent>
+                            {/* {errorLimitOrder && <div style={{ color: 'red' }}> Sản phẩm đã hết hàng </div>} */}
+                        </div>
+
 
                         <ButtonComponent
                             size={40}
@@ -189,7 +222,6 @@ const ProductDetailsComponent = ({ idProduct }) => {
                         </ButtonComponent>
                     </div>
                 </Col>
-                <CommentComponent dataHref={"https://developers.facebook.com/docs/plugins/comments#configurator"} width="1270" />
             </Row>
         </Loading>
     )

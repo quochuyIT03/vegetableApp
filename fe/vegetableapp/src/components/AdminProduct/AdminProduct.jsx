@@ -37,6 +37,18 @@ const AdminProduct = () => {
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
+  const initial = () => ({
+    name: '',
+    description: '',
+    type: '',
+    price: '',
+    rating: '',
+    countInStock: '',
+    discount: '',
+    // sale: '',
+    image: '',
+    newType: ''
+  })
   ////////////////////////////////////////////////////
   const handleOk = () => {
     onFinish()
@@ -108,30 +120,9 @@ const AdminProduct = () => {
     })
   }
   /////////////////stateProduct, setStateProduct//////////////
-  const [stateProduct, setStateProduct] = useState({
-    name: '',
-    description: '',
-    type: '',
-    price: '',
-    rating: '',
-    countInStock: '',
-    discount: '',
-    // sale: '',
-    image: '',
-    newType: ''
-  })
+  const [stateProduct, setStateProduct] = useState(initial())
   /////////////////////////////////////////////////////
-  const [stateProductDetails, setStateProductDetails] = useState({
-    name: '',
-    description: '',
-    type: '',
-    price: '',
-    rating: '',
-    countInStock: '',
-    discount: '',
-    // sale: '',
-    image: ''
-  })
+  const [stateProductDetails, setStateProductDetails] = useState(initial())
   //////////////handleOnChangeAvatar////////////
   const handleOnChangeAvatar = async ({ fileList }) => {
     const file = fileList[0]
@@ -200,7 +191,6 @@ const AdminProduct = () => {
     },
   )
   /////////////////////////////////////////////////////
-  console.log('user', user)
   const onUpdateProduct = () => {
     mutationUpdate.mutate({ id: rowSelected, token: user?.access_token, ...stateProductDetails }, {
       onSettled: () => {
@@ -253,7 +243,7 @@ const AdminProduct = () => {
   )
   ////////////////////////////////////////////////////////
   const getAllProducts = async () => {
-    const res = await ProductService.getAllProduct({ limit: 100 })
+    const res = await ProductService.getAllProduct()
     return res
   }
   ///////////////////////////////////////////////////////
@@ -280,8 +270,14 @@ const AdminProduct = () => {
   }
   ////////////////////////////////////////////////////////////////
   useEffect(() => {
-    form.setFieldsValue(stateProductDetails)
-  }, [form, stateProductDetails])
+    if (!isModalOpen) {
+      form.setFieldsValue(stateProductDetails)
+    } else {
+      form.setFieldsValue(initial())
+    }
+
+  }, [form, stateProductDetails, isModalOpen])
+  console.log('state', stateProductDetails, stateProduct)
   ////////////////////////////////////////////////////////////////
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
@@ -291,7 +287,7 @@ const AdminProduct = () => {
 
   }, [rowSelected, isOpenDrawer])
 
-  console.log('stateProductDetails', stateProductDetails)
+
   /////////////////////////////////////////////////////
   const handleDetailsProduct = () => {
     // if(rowSelected) {

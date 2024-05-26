@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 import { getBase64 } from '../../utils';
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import { useQuery } from '@tanstack/react-query';
-import * as message from '../../components/Message/Message'
+import * as message from '../Message/Message'
 import * as UserService from '../../services/UserService'
 
 const AdminUser = () => {
@@ -503,7 +503,7 @@ const AdminUser = () => {
         <div>
             <WrapperHeader> Quản lí người dùng </WrapperHeader>
             <div style={{ marginTop: '10px' }} >
-                {/* <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} > <PlusCircleFilled style={{ fontSize: '60px' }} /> </Button> */}
+                <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} > <PlusCircleFilled style={{ fontSize: '60px' }} /> </Button>
             </div>
             <div style={{ marginTop: '20px' }} >
                 {/* <TableComponent products ={products?.data} isLoading={isLoadingProducts} /> */}

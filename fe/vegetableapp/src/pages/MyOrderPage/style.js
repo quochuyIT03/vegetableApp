@@ -40,16 +40,23 @@ export const WrapperListOrder = styled.div`
 export const WrapperItemOrder = styled.div`
     padding: 9px 16px;
     border-radius: 6px;
-    display: flex;  
+    // display: flex;  
     align-items: center;
     background: #e7e7e6;
     margin-top: 12px;
+    
 `
 export const WrapperCountOrder = styled.div`
     display: flex;  
     align-items: center;
     border: 1px solid black;
     border-radius: 6px;
+
+`
+export const WrapperContainer = styled.div`
+    color: #d04949;
+    // text-decoration: underline;
+    width: 100%;
 
 `
 export const WrapperInputNumber = styled(InputNumber)`
@@ -84,7 +91,6 @@ export const WrapperInfo = styled.div`
     width: 100%;
     padding: 17px 20px;
     background: #ededed;
-    border-bottom: 2px solid #d10808;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 

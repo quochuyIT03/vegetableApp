@@ -355,7 +355,7 @@ const PaymentPage = () => {
             {payment === 'paypal' && sdkReady ? (
               <div>
                 <PayPalButton
-                  amount={Math.round(totalPriceMemo / 25000)}
+                  amount={totalPriceMemo / 25000}
                   // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
                   onSuccess={onSuccessPaypal}
                   onError={() => {

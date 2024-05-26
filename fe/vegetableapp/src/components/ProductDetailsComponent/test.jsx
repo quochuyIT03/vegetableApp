@@ -1,11 +1,13 @@
 import { Col, Image, Rate, Row } from 'antd'
 import React, { useState } from 'react'
-import { WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct, 
-    WrapperQualityProduct, WrapperStyleColImage, WrapperStyleNameProduct, WrapperStyleSmallImage, WrapperStyleTextSell } from './style'
 import {
-     PlusOutlined, MinusOutlined
-   
-  } from '@ant-design/icons';
+    WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct,
+    WrapperQualityProduct, WrapperStyleColImage, WrapperStyleNameProduct, WrapperStyleSmallImage, WrapperStyleTextSell
+} from './style'
+import {
+    PlusOutlined, MinusOutlined
+
+} from '@ant-design/icons';
 import ButtonComponent from '../ButtonComponent/ButtonComponent'
 import * as ProductService from '../../services/ProductService'
 import { useQuery } from '@tanstack/react-query'
@@ -13,10 +15,12 @@ import Loading from '../LoadingCoponent/LoadingCoponent'
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { addOrderProduct } from '../../redux/slides/orderSlide';
+import ModalComponent from '../ModalComponent/ModalComponent';
 
 
-const ProductDetailsComponent = ({idProduct}) => {
+const ProductDetailsComponent = ({ idProduct }) => {
     const [numOfProduct, setNumOfProduct] = useState(1)
+    const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
@@ -24,43 +28,18 @@ const ProductDetailsComponent = ({idProduct}) => {
         setNumOfProduct(Number(e))
     }
     const fetchGetDetailsProduct = async (context) => {
-            const id = context?.queryKey && context?.queryKey[1]
-            if(id){
-                const res = await ProductService.getDetailsProduct(id);
-                return res.data
-            }
-    }
-    
-const navigate = useNavigate()
-    const handleAddOrder = () => {
-        if(user?.id){
-            // navigate('/sign-in', {state: location?.pathname})
-        }else {
-                // {
-                //     name: { type: String, required: true }, 
-                //     amount: { type: Number, required: true }, 
-                //     image: { type: String, required: true }, 
-                //     price: { type: Number, required: true },
-                //     product: {
-                //         type: mongoose.Schema.Types.ObjectId,
-                //         ref: 'Product',
-                //         require: true,
-                //     },
-                // },
-            dispatch(addOrderProduct({
-                orderItems: {
-                    name: productDetails?.name,
-                    amount: numOfProduct,
-                    image: productDetails?.image,
-                    price: productDetails?.price,
-                    product: productDetails?._id
-                }
-            }))
+        const id = context?.queryKey && context?.queryKey[1]
+        if (id) {
+            const res = await ProductService.getDetailsProduct(id);
+            return res.data
         }
     }
+
     const handleChangeCount = (type) => {
         if (type === 'increase') {
-            setNumOfProduct(numOfProduct + 1);
+            if (numOfProduct < 10) {
+                setNumOfProduct(numOfProduct + 1);
+            }
         } else {
             if (numOfProduct > 1) {
                 setNumOfProduct(numOfProduct - 1);
@@ -72,81 +51,104 @@ const navigate = useNavigate()
         queryKey: ['products-details', idProduct],
         queryFn: fetchGetDetailsProduct,
         fetchGetDetailsProduct: { enabled: !!idProduct }
-        
-      });
-      console.log('productDetails',productDetails)
 
-   
+    });
+    console.log('productDetails', productDetails)
 
-  return (
-    <Loading isLoading={isLoading}>
+    const handleAddOrderProduct = () => {
+        if (!user?.id) {
+            navigate('/sign-in', { state: location?.pathname })
+        } else {
+            dispatch(addOrderProduct({
+                orderItems: {
+                    name: productDetails?.name,
+                    amount: numOfProduct,
+                    image: productDetails?.image,
+                    price: productDetails?.price,
+                    product: productDetails?._id,
+                    discount: productDetails?.discount
+                }
+            }))
+        }
+    }
+    return (
+        <Loading isLoading={isLoading}>
+            <Row style={{ padding: '16px', borderRadius: '4px' }}>
+                <Col span={10} style={{ borderRight: '2px solid #e5e5e5', paddingRight: '8px' }}>
+                    <Image src={productDetails?.image} alt="image product" preview={true} />
+                    <Row style={{ paddingTop: '10px', justifyContent: 'space-between' }}>
+                        <WrapperStyleColImage span={4}>
+                            <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview={false} />
+                        </WrapperStyleColImage>
+
+                        <WrapperStyleColImage span={4}>
+                            <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview={false} />
+                        </WrapperStyleColImage>
+
+                        <WrapperStyleColImage span={4}>
+                            <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview={false} />
+                        </WrapperStyleColImage>
+
+                        <WrapperStyleColImage span={4}>
+                            <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview={false} />
+                        </WrapperStyleColImage>
+
+                        <WrapperStyleColImage span={4}>
+                            <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview={false} />
+                        </WrapperStyleColImage>
+                    </Row>
+                </Col>
+                <Col span={14} style={{ paddingLeft: '6px' }} >
+                    <WrapperStyleNameProduct> {productDetails?.name} </WrapperStyleNameProduct>
+                    <div>
+                        <Rate allowHalf defaultValue={productDetails?.rating} value={productDetails?.rating} />
+                        <WrapperStyleTextSell> | Đã bán 1000+ </WrapperStyleTextSell>
+                    </div>
+                    <WrapperPriceProduct>
+                        <WrapperPriceTextProduct>
+                            {productDetails?.discount > 0 ? (
+                                <>
+
+                                    {(productDetails?.price * (1 - productDetails?.discount / 100)).toLocaleString('vi', { style: 'currency', currency: 'VND' })}
+
+                                    <del style={{ marginLeft: '10px', color: '#cc5454', fontSize: '18px' }}>{productDetails?.price.toLocaleString('vi', { style: 'currency', currency: 'VND' })}</del>
 
 
-        <Row style={{padding: '16px', borderRadius:'4px'}}>
-            <Col span={10} style={{ borderRight: '2px solid #e5e5e5', paddingRight: '8px' }}> 
-                <Image src = {productDetails?.image} alt="image product" preview={true} />
-                <Row style={{paddingTop: '10px', justifyContent:'space-between'}}>
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview ={false} />
-                    </WrapperStyleColImage>
- 
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview ={false} />
-                    </WrapperStyleColImage>
-
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview ={false} />
-                    </WrapperStyleColImage>
-
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview ={false} />
-                    </WrapperStyleColImage>
-
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleSmallImage src={productDetails?.image} alt="image product small" preview ={false} />
-                    </WrapperStyleColImage>
-
-                
+                                </>
+                            ) : (
+                                productDetails?.price.toLocaleString('vi', { style: 'currency', currency: 'VND' })
+                            )}
+                        </WrapperPriceTextProduct>
+                    </WrapperPriceProduct>
+                    <WrapperAddressProduct style={{ marginBottom: '30px' }}>
+                        <span >Mô tả: {productDetails?.description}</span>
+                    </WrapperAddressProduct>
+                    <WrapperAddressProduct>
+                        <span>Giao điến</span>
+                        <span className='address'> {user?.address} </span>
+                        <span className='change-address'> -Đổi địa chỉ</span>
+                    </WrapperAddressProduct>
 
 
-                </Row>
-            </Col>
-            <Col span={14} style={{ paddingLeft: '6px' }} > 
-                <WrapperStyleNameProduct> { productDetails?.name } </WrapperStyleNameProduct>
-                <div>
-                <Rate allowHalf defaultValue={productDetails?.rating} value={productDetails?.rating} />
-                    <WrapperStyleTextSell> | Đã bán 1000+ </WrapperStyleTextSell>
-                </div>
-                <WrapperPriceProduct>
-                    <WrapperPriceTextProduct> {productDetails?.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})} </WrapperPriceTextProduct>
-                </WrapperPriceProduct>
-
-                <WrapperAddressProduct>
-                    <span>Giao điến</span>
-                    <span className='address'> {user?.address} </span>
-                    <span className='change-address'> -Đổi địa chỉ</span>
-                </WrapperAddressProduct>
-               
-                  
-                    <div style={{margin: '10px 0 20px', borderTop: '1px solid #ccc' , borderBottom: '1px solid #ccc', padding: '10px 0'}}>
-                        <div style={{marginBottom: '6px'}}> Số lượng </div>
+                    <div style={{ margin: '10px 0 20px', borderTop: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '10px 0' }}>
+                        <div style={{ marginBottom: '6px' }}> Số lượng </div>
                         <WrapperQualityProduct>
 
-                            <button style={{border: 'none', background: 'transparent', cursor: 'pointer' }}  onClick={() => handleChangeCount('decrease')}>
-                            <MinusOutlined style = {{color: '#000', fontSize:'20px'}} />
+                            <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('decrease')}>
+                                <MinusOutlined style={{ color: '#000', fontSize: '20px' }} />
                             </button>
-                            
-                            <WrapperInputNumber min={1} max={10} defaultValue={1} onChange={onChange} value={numOfProduct} size="small" />              
-                            
-                            <button style={{border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('increase')} >
-                            <PlusOutlined  style = {{color: '#000', fontSize:'20px'}} />
+
+                            <WrapperInputNumber min={1} max={10} defaultValue={1} onChange={onChange} value={numOfProduct} size="small" />
+
+                            <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('increase')} >
+                                <PlusOutlined style={{ color: '#000', fontSize: '20px' }} />
                             </button>
-                        
-                        </WrapperQualityProduct> 
+
+                        </WrapperQualityProduct>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px'}}>
-                        <ButtonComponent 
-                            size = {40} 
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <ButtonComponent
+                            size={40}
                             styleButton={{
                                 background: 'rgb(255, 57, 69)',
                                 height: '48px',
@@ -154,15 +156,15 @@ const navigate = useNavigate()
                                 border: 'none',
                                 borderRadius: '4px'
                             }}
-                            onClick={handleAddOrder}
-                            textButton = {'Mua trả trước'}
-                            styleTextButton ={{color: '#fff', fontSize: '15px', fontWeight: '700'}}
+                            onClick={handleAddOrderProduct}
+                            textButton={'Mua trả trước'}
+                            styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
                         >
 
                         </ButtonComponent>
 
-                        <ButtonComponent 
-                            size = {40} 
+                        <ButtonComponent
+                            size={40}
                             styleButton={{
                                 background: '#fff',
                                 height: '48px',
@@ -170,16 +172,17 @@ const navigate = useNavigate()
                                 border: '1px solid rgb(13, 92, 169)',
                                 borderRadius: '4px'
                             }}
-                            textButton = {'Mua trả sau'}
-                            styleTextButton ={{color: 'rgb(13, 92, 169)', fontSize: '15px'}}
+                            textButton={'Mua trả sau'}
+                            styleTextButton={{ color: 'rgb(13, 92, 169)', fontSize: '15px' }}
                         >
 
                         </ButtonComponent>
                     </div>
-            </Col>
-        </Row>
-    </Loading>
-  )
+                </Col>
+            </Row>
+
+        </Loading>
+    )
 }
 
 export default ProductDetailsComponent

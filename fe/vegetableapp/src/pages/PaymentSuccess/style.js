@@ -19,21 +19,6 @@ export const WrapperStyleHeader = styled.div`
     }
 
 `
-export const WrapperStyleHeaderDelivery = styled.div`
-    background: rgb(255, 255, 255);
-    padding: 9px 16px;
-    border-radius: 6px;
-    display: flex;  
-    margin-bottom: 6px;
-    align-items: center;
-    span{
-        color: rgb(36, 36, 36); 
-        font-weight: 500; 
-        font-size: 15px;
-    }
-
-`
-
 export const WrapperListOrder = styled.div`
 
 `
@@ -44,6 +29,7 @@ export const WrapperItemOrder = styled.div`
     align-items: center;
     background: #e7e7e6;
     margin-top: 12px;
+    justify-content: center;
 `
 export const WrapperCountOrder = styled.div`
     display: flex;  
@@ -89,6 +75,37 @@ export const WrapperInfo = styled.div`
     border-top-right-radius: 6px;
 
 `
+export const WrapperInfoOrderItems = styled.div`
+    width: 100%;
+    padding: 17px 20px;
+    background: #fff;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+
+`
+export const WrapperInfoPayment = styled.div`
+    width: 100%;
+    padding-top: 17px;
+    padding-bottom: 17px;
+    padding-left: 17px;
+    background: #cfefe5;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    margin-bottom: 40px; 
+`
+
+export const WrapperInfoPaymentMethod = styled.div`
+    width: 100%;
+    padding-top: 17px;
+    padding-bottom: 17px;
+    padding-left: 17px;
+    background: #cfefd4;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+
+    margin-bottom: 40px; 
+`
+
 export const WrapperTotal = styled.div`
     display: flex;  
     padding: 17px 20px;
@@ -99,3 +116,11 @@ export const WrapperTotal = styled.div`
     background: #ededed;
     width: 100%;
 `
+export const WrapperValue = styled.div`
+    background: rgb(240, 248, 255);
+    border: 1px solid rgb(194, 255, 255); 
+    width: fit-content;
+    border-radius: 6px; 
+    padding: 10px;
+`
+

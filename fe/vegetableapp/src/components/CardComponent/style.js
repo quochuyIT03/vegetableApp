@@ -32,6 +32,8 @@ export const WrapperCardStyle = styled(Card)`
         width: 200px;
     }
     position: relative;
+    background-color: ${props => props.disabled ? '#cccc' : '#fff'};
+    cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 `
 
 export const WrapperStyleTextSell = styled.span`

@@ -271,11 +271,11 @@ const OrderPage = () => {
                         <span style={{ fontSize: '13px', color: '#242424' }}> {fomatall(order?.price - ((order?.discount / 100) * order?.price))}</span>
                       </span>
                       <WrapperCountOrder>
-                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('decrease', order?.product)}>
+                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('decrease', order?.product, order?.amount === 1)}>
                           <MinusOutlined style={{ color: '#000', fontSize: '20px' }} />
                         </button>
-                        <WrapperInputNumber min={1} max={10} defaultValue={order?.amount} value={order?.amount} size="small" />
-                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('increase', order?.product)} >
+                        <WrapperInputNumber min={1} max={order?.countInStock} defaultValue={order?.amount} value={order?.amount} size="small" />
+                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount('increase', order?.product, order?.amount === order?.countInStock, order?.amount === 1)} >
                           <PlusOutlined style={{ color: '#000', fontSize: '20px' }} />
                         </button>
                       </WrapperCountOrder>
