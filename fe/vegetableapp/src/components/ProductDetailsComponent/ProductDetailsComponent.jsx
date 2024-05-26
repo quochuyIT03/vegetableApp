@@ -110,7 +110,8 @@ const ProductDetailsComponent = ({ idProduct }) => {
                     <WrapperStyleNameProduct> {productDetails?.name} </WrapperStyleNameProduct>
                     <div>
                         <Rate allowHalf defaultValue={productDetails?.rating} value={productDetails?.rating} />
-                        <WrapperStyleTextSell> | Đã bán 1000+ </WrapperStyleTextSell>
+                        <WrapperStyleTextSell> | Trong kho {productDetails?.countInStock} </WrapperStyleTextSell>
+                        <WrapperStyleTextSell> | Đã bán {productDetails?.sale} </WrapperStyleTextSell>
                     </div>
                     <WrapperPriceProduct>
                         <WrapperPriceTextProduct>

@@ -10,7 +10,7 @@ export const loginUser = async (data) => {
 export const signupUser = async (data) => {
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-up`, data)
     return res.data
-    
+
 }
 
 export const getDetailsUser = async (id, access_token) => {
@@ -26,7 +26,7 @@ export const refreshToken = async () => {
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/refresh-token`, {
         withCredentials: true
     })
-       
+
     return res.data
 }
 
@@ -48,17 +48,17 @@ export const getAllUser = async () => {
     return res.data
 }
 export const deleteUser = async (id, access_token, data) => {
-    const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/user/delete-user/${id}`,  {
+    const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/user/delete-user/${id}`, {
         headers: {
-            token:` Bearer ${access_token}`,
+            token: ` Bearer ${access_token}`,
         }
     })
     return res.data
 }
 export const deleteManyUser = async (data, access_token) => {
-    const res = await axiosJWT.post(`${process.env.REACT_APP_API_URL}/user/delete-many`, data,  {
+    const res = await axiosJWT.post(`${process.env.REACT_APP_API_URL}/user/delete-many`, data, {
         headers: {
-            token:` Bearer ${access_token}`,
+            token: ` Bearer ${access_token}`,
         }
     })
     return res.data
@@ -66,7 +66,7 @@ export const deleteManyUser = async (data, access_token) => {
 export const checkEmailExists = async (email) => {
     try {
         // Gọi API kiểm tra email tồn tại trong hệ thống
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/check-email`, { email });
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/check-email`, email);
 
         // Trả về true nếu email đã tồn tại trong hệ thống
         return response.data.exists;
@@ -74,4 +74,21 @@ export const checkEmailExists = async (email) => {
         // Xử lý lỗi nếu có
         throw new Error('Không thể kiểm tra email: ' + error.message);
     }
-};
+}
+export const resetPassword = async (email) => {
+    try {
+        const response = await axios.put(`${process.env.REACT_APP_API_URL}/user/reset-password`, email);
+        return response.data;
+    } catch (error) {
+        return { status: 'ERR', message: error.message };
+    }
+}
+
+export const changePassword = async ({ email, newPassword }) => {
+    try {
+        const response = await axiosJWT.put(`${process.env.REACT_APP_API_URL}/user/change-password`, { email, newPassword });
+        return response.data;
+    } catch (error) {
+        return { status: 'ERR', message: error.message };
+    }
+}

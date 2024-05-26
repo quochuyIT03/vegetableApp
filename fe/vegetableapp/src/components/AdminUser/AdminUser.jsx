@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react'
 import { WrapperHeader, WrapperUploadFile } from './style'
 import { Button, Form, Space } from 'antd'
 import {
-    PlusCircleFilled, UploadOutlined, DeleteOutlined, EditOutlined, SearchOutlined
+    UploadOutlined, DeleteOutlined, EditOutlined, SearchOutlined
 
 } from '@ant-design/icons';
 import TableComponent from '../TableComponent/TableComponent';
@@ -245,6 +247,7 @@ const AdminUser = () => {
                     isAdmin: res.data.isAdmin,
                     address: res.data.address,
                     avatar: res.data.avatar,
+                    city: res.data.city
 
                 });
             }
@@ -379,11 +382,6 @@ const AdminUser = () => {
             }
         },
     });
-    ///////////////////////////////////////////////////////////
-
-    //   const dataTable =users?.data?.length && users?.data?.map((user) => {
-    //     return {...user, key: user._id, isAdmin: user.isAdmin ? 'Admin' : 'User'}
-    //   })
 
     const dataTable = users?.data?.length && users?.data?.map((user) => {
         return { ...user, key: user._id, isAdmin: user.isAdmin };
@@ -436,6 +434,13 @@ const AdminUser = () => {
             dataIndex: 'address',
             key: 'address',
             ...getColumnSearchProps('address')
+
+        },
+        {
+            title: 'city',
+            dataIndex: 'city',
+            key: 'city',
+            ...getColumnSearchProps('city')
 
         },
         {
@@ -613,11 +618,11 @@ const AdminUser = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label="IsAdmin"
-                            name="isAdmin"
-                            rules={[{ required: true, message: 'Please input your isAdmin!' }]}
+                            label="city"
+                            name="city"
+                            rules={[{ required: true, message: 'Please input your city!' }]}
                         >
-                            <InputComponent value={stateUserDetails.isAdmin} onChange={handleOnChangeDetails} name="isAdmin" />
+                            <InputComponent value={stateUserDetails.city} onChange={handleOnChangeDetails} name="city" />
                         </Form.Item>
 
                         <Form.Item

@@ -32,8 +32,8 @@ const PaymentSuccess = () => {
                 <div>
                   <WrapperValue>
                     <TruckOutlined style={{ marginLeft: '10px', marginRight: '10px', fontSize: '24px' }} />
-                    <span style={{ color: '#d57628d9', fontSize: '18px', fontWeight: 'bold', marginRight: '20px' }}>Standard</span>
-                    <span style={{ color: '#000', fontSize: '18px', marginRight: '20px' }}> {orderContant.delivery[state?.delivery]}  Giao hàng bình thường</span>
+
+                    <span style={{ color: '#000', fontSize: '18px', marginRight: '20px' }}> {orderContant.delivery[state?.delivery]}</span>
                     <span style={{ color: '#000', fontSize: '18px' }}>  </span>
                   </WrapperValue>
                 </div>

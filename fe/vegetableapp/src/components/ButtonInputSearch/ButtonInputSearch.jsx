@@ -8,7 +8,7 @@ const ButtonInputSearch = (props) => {
     size,
     placeholder,
     textButton,
-    variant, // Thay bordered bằng variant
+    variant,
     backgroundColorInput = '#fff',
     backgroundColorButton = '#0f9654',
     colorButton = '#fff'
@@ -17,10 +17,10 @@ const ButtonInputSearch = (props) => {
     <div style={{ display: 'flex' }}>
       <InputComponent
         size={size}
-        variant={variant} // Thay bordered bằng variant
+        variant={variant}
         placeholder={placeholder}
         style={{ backgroundColor: backgroundColorInput }}
-        {...props} //mới sửa sau này phần search
+        {...props}
       />
       <ButtonComponent
         size={size}

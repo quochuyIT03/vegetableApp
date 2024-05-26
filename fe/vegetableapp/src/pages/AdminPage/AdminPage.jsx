@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { AppstoreOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, UserOutlined, ShoppingOutlined, LineChartOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import { getItem } from '../../utils';
 import AdminUser from '../../components/AdminUser/AdminUser';
 import AdminProduct from '../../components/AdminProduct/AdminProduct';
 import AdminOrder from '../../components/AdminOrder/AdminOrder';
+import AdminStatistics from '../../components/AdminStatistics/AdminStatistics';
 
 
 const AdminPage = () => {
     const items = [
         getItem('Người dùng', 'user', <UserOutlined />),
         getItem('Sản phẩm', 'product', <AppstoreOutlined />),
-        getItem('Đơn hàng', 'order', <ShoppingOutlined />)
+        getItem('Đơn hàng', 'order', <ShoppingOutlined />),
+        getItem('Thống kê', 'statistics', <LineChartOutlined />),
     ];
 
 
@@ -32,6 +34,8 @@ const AdminPage = () => {
                 return (
                     <AdminOrder />
                 )
+            case 'statistics':
+                return <AdminStatistics />;
 
             default:
                 return <></>
@@ -47,8 +51,6 @@ const AdminPage = () => {
             <HeaderComponent isHiddenSearch isHiddencart />
             <div style={{ display: 'flex', }}>
                 <Menu
-                    //   openKeys={openKeys}
-                    //   onOpenChange={onOpenChange}
                     style={{
                         width: 256,
                         boxShadow: '1px 1px 2px #ccc',
@@ -58,7 +60,7 @@ const AdminPage = () => {
                     items={items}
                     onClick={handleOnClick}
                 />
-                <div style={{ flex: 1, padding: '15px' }} >
+                <div style={{ flex: 1, padding: '15px', background: '#f2edf378' }} >
                     {renderPage(keySelected)}
                 </div>
             </div>

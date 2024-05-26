@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 import { Form, message } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react'
@@ -221,14 +223,18 @@ const PaymentPage = () => {
   }, [order])
 
   const shippingPriceMemo = useMemo(() => {
+    let shippingPrice = 10000; // Giá mặc định
+
     if (priceMemo > 100000) {
-      return 20000
-    } else if (priceMemo === 0) {
-      return 0
-    } else {
-      return 10000
+      shippingPrice = 20000; // Nếu giá trị đơn hàng lớn hơn 100000 thì phí là 20000
     }
-  }, [priceMemo])
+
+    if (delivery === 'standard') {
+      shippingPrice -= 5000; // Giảm 5000 nếu chọn phương thức giao hàng tiêu chuẩn
+    }
+
+    return priceMemo === 0 ? 0 : shippingPrice; // Nếu không có sản phẩm nào thì phí giao hàng là 0
+  }, [priceMemo, delivery]);
 
   const totalPriceMemo = useMemo(() => {
     return Number(priceMemo) - Number(PriceDiscountMemo) + Number(shippingPriceMemo)

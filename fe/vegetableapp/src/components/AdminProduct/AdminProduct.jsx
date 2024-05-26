@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react'
 import { WrapperHeader, WrapperUploadFile } from './style'
-import { Button, Form, Input, Modal, Select, Space } from 'antd'
+import { Button, Form, Select, Space } from 'antd'
 import TableComponent from '../TableComponent/TableComponent'
 import {
   PlusCircleFilled, UploadOutlined, DeleteOutlined, EditOutlined, SearchOutlined
@@ -21,8 +23,6 @@ import ModalComponent from '../ModalComponent/ModalComponent';
 const AdminProduct = () => {
   ////////////isModelOpen///////////////////////
   const [isModalOpen, setIsModalOpen] = useState(false);
-  ///////////////////////////////////////////////////////
-  const [typeSelect, setTypeSelect] = useState('')
   ////////////////////////////////////////////////////
   const [rowSelected, setRowSelected] = useState('')
   ////////////////////////////////////////////////////
@@ -80,7 +80,6 @@ const AdminProduct = () => {
       countInStock: '',
       image: '',
       discount: '',
-      // sale: '',
     })
     form.resetFields()
   };
@@ -96,7 +95,6 @@ const AdminProduct = () => {
       countInStock: '',
       image: '',
       discount: '',
-      // sale: '',
     })
     form.resetFields()
   };
@@ -225,7 +223,6 @@ const AdminProduct = () => {
         image,
         countInStock,
         discount,
-        // sale
       } = data
       const res = ProductService.createProduct({
         name,
@@ -236,7 +233,6 @@ const AdminProduct = () => {
         countInStock,
         image,
         discount,
-        // sale
       })
       return res
     }
@@ -290,11 +286,6 @@ const AdminProduct = () => {
 
   /////////////////////////////////////////////////////
   const handleDetailsProduct = () => {
-    // if(rowSelected) {
-    //     setIsLoadingUpdate(true)
-    //     // fetchGetDetailsProduct()
-
-    // }
     setIsOpenDrawer(true)
     console.log('rowSelected', rowSelected)
   }
@@ -320,7 +311,6 @@ const AdminProduct = () => {
   const { data: dataDeletedMany, isLoading: isLoadingDeletedMany, isSuccess: isSuccessDeletedMany, isError: isErrorDeletedMany } = mutationDeletedMany
   console.log('dataUpdated', dataUpdated)
   ///////////////////////////////////////////////////////////
-  // const {isLoading: isLoadingProducts, data: products} = useQuery({queryKey: ['products'], queryFn:getAllProducts})
   const queryProduct = useQuery({ queryKey: ['products'], queryFn: getAllProducts })
   const typeProduct = useQuery({ queryKey: ['type-product'], queryFn: fetchAllTypeProduct })
   const { isLoading: isLoadingProducts, data: products } = queryProduct
@@ -386,19 +376,6 @@ const AdminProduct = () => {
           >
             Reset
           </Button>
-          {/* <Button
-                type="link"
-                size="small"
-                onClick={() => {
-                  confirm({
-                    closeDropdown: false,
-                  });
-                  setSearchText(selectedKeys[0]);
-                  setSearchedColumn(dataIndex);
-                }}
-              >
-                Filter
-              </Button> */}
           <Button
             type="link"
             size="small"
@@ -425,20 +402,6 @@ const AdminProduct = () => {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    // render: (text) =>
-    //   searchedColumn === dataIndex ? (
-    //     // <Highlighter
-    //     //   highlightStyle={{
-    //     //     backgroundColor: '#ffc069',
-    //     //     padding: 0,
-    //     //   }}
-    //     //   searchWords={[searchText]}
-    //     //   autoEscape
-    //     //   textToHighlight={text ? text.toString() : ''}
-    //     // />
-    //   ) : (
-    //     text
-    //   ),
   });
   ////////////////////////////////////////////////////////
   const columns = [
@@ -596,7 +559,6 @@ const AdminProduct = () => {
           <PlusCircleFilled style={{ fontSize: '60px' }} /> </Button>
       </div>
       <div style={{ marginTop: '20px' }} >
-        {/* <TableComponent products ={products?.data} isLoading={isLoadingProducts} /> */}
         <TableComponent pagination={{ pageSize: 5 }} handleDeleteMany={handleDeleteManyProducts} columns={columns} isLoading={isLoadingProducts} data={dataTable} onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {
@@ -632,8 +594,6 @@ const AdminProduct = () => {
 
             <Select
               name="type"
-              // defaultValue="lucy"
-              // style={{ width: 120 }}
               value={stateProduct.type}
               onChange={handleChangeSelect}
               options={renderOptions(typeProduct?.data?.data)}
@@ -685,14 +645,6 @@ const AdminProduct = () => {
           >
             <InputComponent value={stateProduct.discount} onChange={handleOnChange} name="discount" />
           </Form.Item>
-
-          {/* <Form.Item
-                label="Product Sale"
-                name="sale"
-                rules={[{ required: true, message: 'Please input your Product Sale!' }]}
-                >
-                <InputComponent value={stateProduct.sale} onChange={handleOnChange} name="sale" />
-                </Form.Item> */}
 
           <Form.Item
             label="Product Rating"
@@ -787,14 +739,6 @@ const AdminProduct = () => {
             >
               <InputComponent value={stateProductDetails.discount} onChange={handleOnChangeDetails} name="discount" />
             </Form.Item>
-
-            {/* <Form.Item
-                label="Product Sale"
-                name="sale"
-                rules={[{ required: true, message: 'Please input your Product Sale!' }]}
-                >
-                <InputComponent value={stateProductDetails.sale} onChange={handleOnChangeDetails} name="sale" />
-                </Form.Item> */}
 
             <Form.Item
               label="Product Rating"

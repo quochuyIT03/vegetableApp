@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Image } from 'antd'
 import React from 'react'
 import { StyleNameProduct, WrapperCardStyle, WrapperPriceDiscountText, WrapperPriceText, WrapperReporText, WrapperStyleTextSell } from './style'
@@ -30,12 +31,12 @@ const CardComponent = (props) => {
         },
         body: {
           padding: '10px',
-          // background:'#efefef'
+
         },
       }}
       style={{
         width: 210,
-        // background:'#efefef'
+
       }}
       cover={<img alt="ảnh" src={image} />}
       onClick={() => countInStock !== 0 && handleDetailsProduct(id)}

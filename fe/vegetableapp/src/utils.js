@@ -1,3 +1,4 @@
+import { orderContant } from './contant';
 
 export const isJsonString = (data) => {
     try {
@@ -64,4 +65,26 @@ export const initFacebookSDK = () => {
         js.src = `//connect.facebook.net/${locale}/sdk.js`;
         fjs.parentNode.insertBefore(js, fjs);
     })(document, "script", "facebook-jssdk");
+}
+
+export const convertDataChart = (data, type) => {
+    try {
+        const object = {}
+        Array.isArray(data) && data.forEach((opt) => {
+            if (!object[opt[type]]) {
+                object[opt[type]] = 1
+            } else {
+                object[opt[type]] += 1
+            }
+        })
+        const results = Array.isArray(Object.keys(object)) && Object.keys(object).map((item) => {
+            return {
+                name: orderContant.payment[item],
+                value: object[item]
+            }
+        })
+        return results
+    } catch (error) {
+        return []
+    }
 }

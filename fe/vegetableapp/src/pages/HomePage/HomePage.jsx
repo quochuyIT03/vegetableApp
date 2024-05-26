@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TypeProduct from '../../components/TypeProduct/TypeProduct'
 import { WrapperButtonMore, WrapperProduct, WrapperTypeProduct } from './style'
 import SliderComponent from '../../components/SliderComponent/SliderComponent'
@@ -7,7 +7,7 @@ import slider2 from '../../assets/images/banner_1.jpg'
 import slider3 from '../../assets/images/banner_2.jpg'
 import CardComponent from '../../components/CardComponent/CardComponent'
 import * as ProductService from '../../services/ProductService'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useSelector } from 'react-redux'
 import Loading from '../../components/LoadingCoponent/LoadingCoponent'
 import { useDebounce } from '../../hooks/useDebounce'
@@ -16,46 +16,18 @@ import { useDebounce } from '../../hooks/useDebounce'
 const HomePage = () => {
   const searchProduct = useSelector((state) => state?.product?.search)
   const searchDebounce = useDebounce(searchProduct, 1000)
-  // const refSearch = useRef()
   const [limit, setLimit] = useState(10)
-  // const [limit, setLimit] = useState(5)
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false)
   const [typeProducts, setTypeProducts] = useState([])
-  const arr = ['Rau Cải', 'Trái Cây', 'Rau Thơm']
-  // const [stateProducts, setStateProducts] = useState([])
 
-  // const fetchProductAll = async (search) => {
-  //   // if(search.length > 0){}
-  //   const res = await ProductService.getAllProduct(search)
-  //   if(search?.length > 0 || refSearch.current){
-  //     setStateProducts(res?.data)
-  //     return []
-  //   }else{
-  //     return res
-  //   }
-  // }
 
   const fetchProductAll = async (context) => {
-    // if(search.length > 0){}
     const limit = context?.queryKey && context?.queryKey[1]
     const search = context?.queryKey && context?.queryKey[2]
     const res = await ProductService.getAllProduct(search, limit)
-    // if(search?.length > 0 || refSearch.current){
-    //   setStateProducts(res?.data)
-    //   return []
-    // }else{
     return res
-    // }
   }
-
-  // useEffect(() => {
-  //   if(refSearch.current) {
-  //       setLoading(true)
-  //       fetchProductAll(searchDebounce)
-  //   }
-  //   refSearch.current = true
-  //   setLoading(false)
-  // }, [searchDebounce])
 
   const { isLoading, data: products, isPreviousData } = useQuery({
     queryKey: ['products', limit, searchDebounce],
@@ -71,11 +43,7 @@ const HomePage = () => {
 
     return res
   }
-  // useEffect(() => {
-  //   if(products && products?.data?.length > 0) {
-  //     setStateProducts(products?.data) 
-  //   }
-  // }, [products])
+
 
   useEffect(() => {
     fetchAllTypeProduct()

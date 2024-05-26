@@ -1,19 +1,17 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Button, Checkbox, Form, message } from 'antd';
+import { Checkbox, Form, message } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react'
-import { WrapperCountOrder, WrapperInfo, WrapperLeft, WrapperListOrder, UploadOutlined, WrapperPriceDiscount, WrapperItemOrder, WrapperRight, WrapperStyleHeader, WrapperTotal, WrapperInputNumber, WrapperStyleHeaderDelivery } from './style'
+import { WrapperCountOrder, WrapperInfo, WrapperLeft, WrapperListOrder, WrapperItemOrder, WrapperRight, WrapperStyleHeader, WrapperTotal, WrapperInputNumber, WrapperStyleHeaderDelivery } from './style'
 import { DeleteOutlined, MinusOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 import { fomatall } from '../../fomatall';
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { increaseAmount, decreaseAmount, deleleOrderProduct, deleleManyOrderProduct, selectedOrder } from '../../redux/slides/orderSlide';
-import DrawerComponent from '../../components/DrawerComponent/DrawerComponent';
 import InputComponent from '../../components/InputComponent/InputComponent';
 import { useNavigate } from 'react-router-dom';
 import ModalComponent from '../../components/ModalComponent/ModalComponent';
 import * as UserService from '../../services/UserService'
 import { useMutationHooks } from '../../hooks/useMutationHook';
-import Loading from '../../components/LoadingCoponent/LoadingCoponent';
 import { updateUser } from '../../redux/slides/userSlide'
 import StepComponent from '../../components/StepComponent/StepComponent';
 
@@ -107,6 +105,7 @@ const OrderPage = () => {
     },
   )
 
+  // eslint-disable-next-line no-unused-vars
   const { isLoading, data } = mutationUpdate
 
   const handleCancelUpdateInfo = () => {
