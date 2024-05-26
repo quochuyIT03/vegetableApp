@@ -64,7 +64,7 @@ export const routes = [
     {
         path: '/change-password',
         page: ChangePasswordPage,
-        isShowHeader: false
+        isShowHeader: true
     },
     {
         path: '/product-details/:id',

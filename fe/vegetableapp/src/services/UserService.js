@@ -86,9 +86,10 @@ export const resetPassword = async (email) => {
 
 export const changePassword = async ({ email, newPassword }) => {
     try {
-        const response = await axiosJWT.put(`${process.env.REACT_APP_API_URL}/user/change-password`, { email, newPassword });
+        const response = await axios.put(`${process.env.REACT_APP_API_URL}/user/change-password`, { email, newPassword });
         return response.data;
     } catch (error) {
         return { status: 'ERR', message: error.message };
     }
 }
+

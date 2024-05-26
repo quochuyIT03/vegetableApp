@@ -44,7 +44,6 @@ const SignInPage = () => {
       localStorage.setItem('access_token', JSON.stringify(data?.access_token))
       if (data?.access_token) {
         const decoded = jwtDecode(data?.access_token)
-        console.log('decode', decoded)
         if (decoded?.id) {
           handleGetDetailsUser(decoded?.id, data?.access_token)
 
@@ -130,7 +129,7 @@ const SignInPage = () => {
             styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
           > </ButtonComponent>
           {/* </Loading> */}
-          <p><WrapperTextLight onClick={handleNavigateForgotPassword}>Quên mật khẩu?</WrapperTextLight></p>
+          {/* <p><WrapperTextLight onClick={handleNavigateForgotPassword}>Quên mật khẩu?</WrapperTextLight></p> */}
           <p>Chưa có tài khoản? <WrapperTextLight onClick={handleNavigateSignUp}> Tạo tài khoản </WrapperTextLight></p>
         </WrapperContainerLeft>
         <WrapperContainerRight>

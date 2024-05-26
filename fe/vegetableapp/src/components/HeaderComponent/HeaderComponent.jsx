@@ -51,7 +51,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddencart = false }) => {
         <WrapperContentPopup onClick={() => handleClickNextPage('admin')}>Quản lí hệ thống</WrapperContentPopup>
       )}
       <WrapperContentPopup onClick={() => handleClickNextPage(`myOrder`)}>Đơn hàng </WrapperContentPopup>
-      <WrapperContentPopup onClick={() => handleClickNextPage(`change-password`)}>Đổi mật khẩu </WrapperContentPopup>
+      {/* <WrapperContentPopup onClick={() => handleClickNextPage(`change-password`)}>Đổi mật khẩu </WrapperContentPopup> */}
       <WrapperContentPopup onClick={() => handleClickNextPage()}>Logout</WrapperContentPopup>
     </div>
   );

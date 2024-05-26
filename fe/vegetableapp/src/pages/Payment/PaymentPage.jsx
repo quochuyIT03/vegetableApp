@@ -304,11 +304,11 @@ const PaymentPage = () => {
                   <span style={{ color: '#000', fontSize: '18px', marginRight: '20px', marginLeft: '20px' }}>Thanh toán qua PayPal</span>
                   <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Paypal_2014_logo.png" alt="PayPal" style={{ width: '40px', height: '40px', marginRight: '10px', marginLeft: '10px' }} />
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                   <input type="radio" name="paymentMethod" value="zalopay" onChange={handlePaymentMethodChange} />
                   <span style={{ color: '#000', fontSize: '18px', marginRight: '20px', marginLeft: '20px' }}>Thanh toán qua ZaloPay</span>
                   <img src="https://payos.vn/docs/img/logo.svg" alt="ZaloPay" style={{ width: '40px', height: '40px', marginRight: '10px', marginLeft: '10px' }} />
-                </div>
+                </div> */}
               </div>
             </WrapperInfoPaymentMethod>
           </WrapperLeft>
